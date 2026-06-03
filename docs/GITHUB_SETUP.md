@@ -26,6 +26,8 @@ https://github.com/golodokol/skazka-na-noch.git
 
 Репозиторий сейчас пустой — нужно один раз залить локальную папку `Documents\skazka-na-noch`.
 
+После push настройте бота в Telegram: [BOTFATHER_SETUP.md](BOTFATHER_SETUP.md).
+
 ## 4. Первый коммит (PowerShell)
 
 ```powershell

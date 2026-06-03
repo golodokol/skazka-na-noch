@@ -32,6 +32,7 @@ Telegram-бот — **вечерний co-pilot для уставших роди
 | [docs/GTM.md](docs/GTM.md) | Go-to-market, каналы, копирайт |
 | [docs/LEGAL_AND_PRIVACY.md](docs/LEGAL_AND_PRIVACY.md) | Персональные данные, возраст, оферта |
 | [docs/LAUNCH_CHECKLIST.md](docs/LAUNCH_CHECKLIST.md) | Чеклист запуска в Telegram |
+| [docs/BOTFATHER_SETUP.md](docs/BOTFATHER_SETUP.md) | **BotFather: токен, команды, связь с docs** |
 | [research/product-research-full.md](research/product-research-full.md) | Полный исследовательский свод |
 
 ## Быстрый старт (разработка)

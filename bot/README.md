@@ -1,22 +1,30 @@
 # Код бота (MVP)
 
-Здесь будет реализация Telegram-бота. Документация — в [`../docs/`](../docs/).
+Telegram: [@skazkadobrolavka_bot](https://t.me/skazkadobrolavka_bot)
 
-## Следующие шаги разработки
+Документация — в [`../docs/`](../docs/), настройка BotFather — [BOTFATHER_SETUP.md](../docs/BOTFATHER_SETUP.md).
 
-1. `pip install aiogram openai sqlalchemy python-dotenv`
-2. Реализовать handlers по [BOT_FLOWS.md](../docs/BOT_FLOWS.md)
-3. Подключить промпт из [CONTENT_AND_SAFETY.md](../docs/CONTENT_AND_SAFETY.md)
-4. Пройти [LAUNCH_CHECKLIST.md](../docs/LAUNCH_CHECKLIST.md)
+## Запуск локально
 
-## Минимальный запуск (после реализации)
+```powershell
+cd $env:USERPROFILE\Documents\skazka-na-noch
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r bot\requirements.txt
 
-```bash
-cd bot
-cp ../.env.example ../.env
-# заполнить TELEGRAM_BOT_TOKEN, OPENAI_API_KEY
-python main.py
+# Токен только в ../.env (не коммитить!)
+python bot\main.py
 ```
+
+Без `OPENAI_API_KEY` бот выдаёт **запасные сказки** из `fallback_stories.py`.  
+С ключом OpenAI — генерация по `prompts/system_ru.txt`.
+
+## Структура
+
+- `main.py` — точка входа, polling
+- `handlers.py` — /start, меню, профиль, сказки
+- `story_generator.py` — LLM + fallback
+- `db.py` — SQLite, лимит 5/нед
 
 ## Структура (план)
 
