@@ -7,7 +7,6 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import CallbackQuery, Message
 
 import db
-from config import FREE_STORIES_PER_WEEK
 from keyboards import feedback_kb, main_menu_kb, profile_kb, skip_hero_kb
 from story_generator import generate_story, split_message
 from texts import (
@@ -18,7 +17,6 @@ from texts import (
     FEEDBACK_PROMPT,
     GENERATING,
     HELP_TEXT,
-    LIMIT_REACHED,
     MAIN_MENU_HINT,
     ONBOARDING_DONE,
     PRIVACY_TEXT,
@@ -262,13 +260,6 @@ async def run_story_generation(
     profile = await db.get_profile(uid)
     if not profile:
         await message.answer("Сначала /start — настройте профиль ребёнка.")
-        return
-
-    if not await db.can_generate(uid):
-        await message.answer(
-            LIMIT_REACHED.format(limit=FREE_STORIES_PER_WEEK),
-            reply_markup=main_menu_kb(),
-        )
         return
 
     data = await state.get_data()

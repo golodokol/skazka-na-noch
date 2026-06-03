@@ -2,7 +2,7 @@ import aiosqlite
 from datetime import date, timedelta
 from pathlib import Path
 
-from config import DATABASE_PATH, FREE_STORIES_PER_WEEK
+from config import DATABASE_PATH
 
 
 def week_start(d: date | None = None) -> str:
@@ -153,7 +153,3 @@ async def increment_usage(telegram_id: int) -> int:
         )
         row = await cur.fetchone()
         return row[0]
-
-
-async def can_generate(telegram_id: int) -> bool:
-    return await get_weekly_count(telegram_id) < FREE_STORIES_PER_WEEK

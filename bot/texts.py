@@ -30,12 +30,6 @@ AFTER_STORY = (
 
 FEEDBACK_PROMPT = "Как прошло?"
 
-LIMIT_REACHED = (
-    "На этой неделе {limit} бесплатных сказок уже использованы 🌙\n\n"
-    "Завтра лимит обновится, или напишите нам о подписке (скоро).\n"
-    "Документация проекта: https://github.com/golodokol/skazka-na-noch"
-)
-
 HELP_TEXT = (
     "Как пользоваться:\n\n"
     "• /start — меню и сказка\n"

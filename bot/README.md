@@ -24,7 +24,7 @@ python bot\main.py
 - `main.py` — точка входа, polling
 - `handlers.py` — /start, меню, профиль, сказки
 - `story_generator.py` — LLM + fallback
-- `db.py` — SQLite, лимит 5/нед
+- `db.py` — SQLite, профили и учёт сказок (без лимита)
 
 ## Структура (план)
 
