@@ -6,6 +6,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.exceptions import TelegramUnauthorizedError
+from aiogram.types import BotCommand
 
 from config import TELEGRAM_BOT_TOKEN
 from db import init_db
@@ -14,6 +15,18 @@ from session import BotSession
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 logger = logging.getLogger(__name__)
+
+BOT_COMMANDS = [
+    BotCommand(command="start", description="Начать и получить сказку"),
+    BotCommand(command="story", description="Быстрая сказка (последний режим)"),
+    BotCommand(command="profile", description="Профиль ребёнка"),
+    BotCommand(command="help", description="Как пользоваться"),
+    BotCommand(command="privacy", description="Политика данных"),
+]
+
+
+async def setup_bot_commands(bot: Bot) -> None:
+    await bot.set_my_commands(BOT_COMMANDS)
 
 
 async def main() -> None:
@@ -38,6 +51,7 @@ async def main() -> None:
     try:
         me = await bot.get_me()
         logger.info("Подключено: @%s (%s)", me.username, me.first_name)
+        await setup_bot_commands(bot)
     except TelegramUnauthorizedError:
         logger.error(
             "Неверный токен. BotFather → /mybots → Revoke → новый токен в .env"

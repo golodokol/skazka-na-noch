@@ -12,6 +12,17 @@ load_dotenv(Path := __import__("pathlib").Path(__file__).resolve().parent.parent
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
 PROXY = os.getenv("TELEGRAM_PROXY", "").strip()
+PROXY_USER = os.getenv("TELEGRAM_PROXY_USER", "").strip()
+PROXY_PASS = os.getenv("TELEGRAM_PROXY_PASSWORD", "").strip()
+
+
+def _effective_proxy() -> str:
+    if not PROXY:
+        return ""
+    if PROXY_USER and "@" not in PROXY.split("://", 1)[-1]:
+        scheme, rest = PROXY.split("://", 1)
+        return f"{scheme}://{PROXY_USER}:{PROXY_PASS}@{rest}"
+    return PROXY
 
 
 async def main() -> None:
@@ -21,23 +32,33 @@ async def main() -> None:
 
     url = f"https://api.telegram.org/bot{TOKEN}/getMe"
     timeout = aiohttp.ClientTimeout(total=30)
-    connector = aiohttp.TCPConnector(family=socket.AF_INET)
+    proxy = _effective_proxy()
 
-    kwargs: dict = {"timeout": timeout, "connector": connector}
-    if PROXY:
-        if "t.me/proxy" in PROXY or PROXY.startswith("https://"):
+    if proxy:
+        if "t.me/proxy" in proxy or proxy.startswith("https://"):
             print("FAIL: TELEGRAM_PROXY — нужен socks5:// или http://, не t.me/proxy")
             sys.exit(1)
-        kwargs["proxy"] = PROXY
-        print(f"Используется прокси: {PROXY.split('@')[-1]}")  # без credentials в лог
+        print(f"Используется прокси: {proxy.split('@')[-1]}")
 
     try:
-        async with aiohttp.ClientSession(**kwargs) as session:
+        if proxy and proxy.startswith("socks"):
+            from aiohttp_socks import ProxyConnector
+
+            connector = ProxyConnector.from_url(proxy, family=socket.AF_INET)
+            session = aiohttp.ClientSession(connector=connector, timeout=timeout)
+        else:
+            connector = aiohttp.TCPConnector(family=socket.AF_INET)
+            kwargs: dict = {"connector": connector, "timeout": timeout}
+            if proxy:
+                kwargs["proxy"] = proxy
+            session = aiohttp.ClientSession(**kwargs)
+
+        async with session:
             async with session.get(url) as resp:
                 data = json.loads(await resp.text())
     except Exception as exc:
         print(f"FAIL: нет связи с api.telegram.org — {exc}")
-        print("Включите VPN для всей системы или укажите TELEGRAM_PROXY=socks5://127.0.0.1:ПОРТ")
+        print("Включите VPN, Inbounds → SOCKS в Happ, или поправьте TELEGRAM_PROXY")
         sys.exit(1)
 
     if not data.get("ok"):

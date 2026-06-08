@@ -26,6 +26,7 @@ async def init_db() -> None:
                 user_id INTEGER PRIMARY KEY REFERENCES users(telegram_id),
                 name TEXT NOT NULL DEFAULT 'Малыш',
                 age_years INTEGER NOT NULL DEFAULT 4,
+                gender TEXT NOT NULL DEFAULT 'm',
                 favorite_hero TEXT DEFAULT '',
                 no_scary INTEGER NOT NULL DEFAULT 1
             );
@@ -36,6 +37,17 @@ async def init_db() -> None:
                 PRIMARY KEY (user_id, week_start)
             );
             """
+        )
+        await db.commit()
+        await _migrate_gender_column(db)
+
+
+async def _migrate_gender_column(db: aiosqlite.Connection) -> None:
+    cur = await db.execute("PRAGMA table_info(child_profiles)")
+    cols = {row[1] for row in await cur.fetchall()}
+    if "gender" not in cols:
+        await db.execute(
+            "ALTER TABLE child_profiles ADD COLUMN gender TEXT NOT NULL DEFAULT 'm'"
         )
         await db.commit()
 
@@ -54,7 +66,7 @@ async def get_profile(telegram_id: int) -> dict | None:
         db.row_factory = aiosqlite.Row
         cur = await db.execute(
             """
-            SELECT c.name, c.age_years, c.favorite_hero, c.no_scary,
+            SELECT c.name, c.age_years, c.gender, c.favorite_hero, c.no_scary,
                    u.last_mode, u.length_pref
             FROM child_profiles c
             JOIN users u ON u.telegram_id = c.user_id
@@ -71,25 +83,27 @@ async def save_profile(
     name: str,
     age_years: int,
     favorite_hero: str = "",
+    gender: str = "m",
 ) -> None:
     await ensure_user(telegram_id)
     async with aiosqlite.connect(DATABASE_PATH) as db:
         await db.execute(
             """
-            INSERT INTO child_profiles (user_id, name, age_years, favorite_hero)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO child_profiles (user_id, name, age_years, gender, favorite_hero)
+            VALUES (?, ?, ?, ?, ?)
             ON CONFLICT(user_id) DO UPDATE SET
                 name=excluded.name,
                 age_years=excluded.age_years,
+                gender=excluded.gender,
                 favorite_hero=excluded.favorite_hero
             """,
-            (telegram_id, name, age_years, favorite_hero),
+            (telegram_id, name, age_years, gender, favorite_hero),
         )
         await db.commit()
 
 
 async def update_profile_field(telegram_id: int, field: str, value) -> None:
-    allowed = {"name", "age_years", "favorite_hero"}
+    allowed = {"name", "age_years", "gender", "favorite_hero"}
     if field not in allowed:
         return
     async with aiosqlite.connect(DATABASE_PATH) as db:

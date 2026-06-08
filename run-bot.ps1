@@ -29,3 +29,9 @@ Write-Host "Installing dependencies..."
 
 Write-Host "Bot starting. Stop with Ctrl+C"
 .\.venv\Scripts\python.exe bot\main.py
+
+# If "execution of scripts is disabled", use instead:
+#   run-bot.bat
+# Or once in PowerShell:
+#   Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+#   .\run-bot.ps1
