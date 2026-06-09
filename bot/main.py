@@ -12,6 +12,7 @@ from config import TELEGRAM_BOT_TOKEN
 from db import init_db
 from handlers import router
 from session import BotSession
+from texts import BOT_DESCRIPTION
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 logger = logging.getLogger(__name__)
@@ -27,6 +28,7 @@ BOT_COMMANDS = [
 
 async def setup_bot_commands(bot: Bot) -> None:
     await bot.set_my_commands(BOT_COMMANDS)
+    await bot.set_my_description(BOT_DESCRIPTION)
 
 
 async def main() -> None:

@@ -56,6 +56,55 @@ def feedback_kb() -> InlineKeyboardMarkup:
     )
 
 
+def feedback_bad_kb() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="😨 Испугался / тревожно", callback_data="fb:bad:scary"
+                ),
+                InlineKeyboardButton(
+                    text="😐 Не зацепило", callback_data="fb:bad:boring"
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    text="🌊 Не успокоило", callback_data="fb:bad:not_calming"
+                ),
+            ],
+            [
+                InlineKeyboardButton(text="📏 Коротко", callback_data="fb:bad:short"),
+                InlineKeyboardButton(
+                    text="🎭 Не тот герой", callback_data="fb:bad:hero"
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    text="🎯 Не про сегодня", callback_data="fb:bad:today"
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    text="✏️ Свой вариант", callback_data="fb:bad:other"
+                ),
+                InlineKeyboardButton(text="🔄 Другую сказку", callback_data="fb:more"),
+            ],
+            [InlineKeyboardButton(text="🏠 В меню", callback_data="menu")],
+        ]
+    )
+
+
+def feedback_action_kb() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text="🔄 Ещё одну", callback_data="fb:more"),
+                InlineKeyboardButton(text="🏠 В меню", callback_data="menu"),
+            ],
+        ]
+    )
+
+
 def gender_kb(*, prefix: str = "onboard") -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[

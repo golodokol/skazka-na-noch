@@ -2,4 +2,5 @@ aiogram>=3.13,<4
 python-dotenv>=1.0
 aiosqlite>=0.20
 openai>=1.40
-aiohttp-socks>=0.8
+pymorphy3>=2.0
+pymorphy3-dicts-ru>=2.4

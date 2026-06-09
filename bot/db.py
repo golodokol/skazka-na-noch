@@ -36,10 +36,87 @@ async def init_db() -> None:
                 story_count INTEGER DEFAULT 0,
                 PRIMARY KEY (user_id, week_start)
             );
+            CREATE TABLE IF NOT EXISTS story_memory (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                mode TEXT,
+                setting_id TEXT,
+                helper_id TEXT,
+                angle_id TEXT,
+                metaphor TEXT,
+                snippet TEXT
+            );
+            CREATE INDEX IF NOT EXISTS idx_story_memory_user
+                ON story_memory(user_id, id DESC);
+            CREATE TABLE IF NOT EXISTS story_feedback (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                feedback TEXT NOT NULL,
+                bad_reason TEXT,
+                bad_text TEXT,
+                mode TEXT
+            );
+            CREATE INDEX IF NOT EXISTS idx_story_feedback_user
+                ON story_feedback(user_id, id DESC);
             """
         )
         await db.commit()
         await _migrate_gender_column(db)
+
+
+STORY_MEMORY_KEEP = 12
+
+
+async def get_story_memories(telegram_id: int, limit: int = STORY_MEMORY_KEEP) -> list[dict]:
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        cur = await db.execute(
+            """
+            SELECT mode, setting_id, helper_id, angle_id, metaphor, snippet
+            FROM story_memory
+            WHERE user_id = ?
+            ORDER BY id DESC
+            LIMIT ?
+            """,
+            (telegram_id, limit),
+        )
+        return [dict(row) for row in await cur.fetchall()]
+
+
+async def add_story_memory(telegram_id: int, memory: dict) -> None:
+    await ensure_user(telegram_id)
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        await db.execute(
+            """
+            INSERT INTO story_memory
+                (user_id, mode, setting_id, helper_id, angle_id, metaphor, snippet)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                telegram_id,
+                memory.get("mode", ""),
+                memory.get("setting_id", ""),
+                memory.get("helper_id", ""),
+                memory.get("angle_id", ""),
+                memory.get("metaphor", ""),
+                memory.get("snippet", ""),
+            ),
+        )
+        await db.execute(
+            """
+            DELETE FROM story_memory
+            WHERE user_id = ? AND id NOT IN (
+                SELECT id FROM story_memory
+                WHERE user_id = ?
+                ORDER BY id DESC
+                LIMIT ?
+            )
+            """,
+            (telegram_id, telegram_id, STORY_MEMORY_KEEP),
+        )
+        await db.commit()
 
 
 async def _migrate_gender_column(db: aiosqlite.Connection) -> None:
@@ -106,7 +183,20 @@ async def update_profile_field(telegram_id: int, field: str, value) -> None:
     allowed = {"name", "age_years", "gender", "favorite_hero"}
     if field not in allowed:
         return
+    await ensure_user(telegram_id)
     async with aiosqlite.connect(DATABASE_PATH) as db:
+        cur = await db.execute(
+            "SELECT 1 FROM child_profiles WHERE user_id = ?",
+            (telegram_id,),
+        )
+        if not await cur.fetchone():
+            await db.execute(
+                """
+                INSERT INTO child_profiles (user_id, name, age_years, gender)
+                VALUES (?, 'Малыш', 4, 'm')
+                """,
+                (telegram_id,),
+            )
         await db.execute(
             f"UPDATE child_profiles SET {field} = ? WHERE user_id = ?",
             (value, telegram_id),
@@ -128,10 +218,34 @@ async def adjust_length_pref(telegram_id: int, factor: float) -> None:
     async with aiosqlite.connect(DATABASE_PATH) as db:
         await db.execute(
             """
-            UPDATE users SET length_pref = MAX(0.5, MIN(1.5, length_pref * ?))
+            UPDATE users SET length_pref = MAX(0.5, length_pref * ?)
             WHERE telegram_id = ?
             """,
             (factor, telegram_id),
+        )
+        await db.commit()
+
+
+async def save_story_feedback(
+    telegram_id: int,
+    feedback: str,
+    *,
+    bad_reason: str = "",
+    bad_text: str = "",
+    mode: str = "",
+) -> None:
+    await ensure_user(telegram_id)
+    if not mode:
+        profile = await get_profile(telegram_id)
+        mode = (profile or {}).get("last_mode") or ""
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        await db.execute(
+            """
+            INSERT INTO story_feedback
+                (user_id, feedback, bad_reason, bad_text, mode)
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (telegram_id, feedback, bad_reason or None, bad_text or None, mode or None),
         )
         await db.commit()
 

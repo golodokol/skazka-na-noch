@@ -1,5 +1,3 @@
-import asyncio
-
 from aiogram import F, Router
 from aiogram.filters import Command, CommandStart
 from aiogram.fsm.context import FSMContext
@@ -9,6 +7,8 @@ from aiogram.types import CallbackQuery, Message
 import db
 from keyboards import (
     BUTTON_TO_MODE,
+    feedback_action_kb,
+    feedback_bad_kb,
     feedback_kb,
     gender_kb,
     main_menu_kb,
@@ -16,8 +16,9 @@ from keyboards import (
     reply_menu_kb,
     skip_hero_kb,
 )
-from name_grammar import GENDER_LABELS, normalize_gender
+from name_grammar import GENDER_LABELS, normalize_gender, today_ask
 from story_generator import generate_story, split_message
+from story_variety import memory_from_plan, pick_variety
 from texts import (
     AFTER_STORY,
     ASK_AGE,
@@ -25,14 +26,21 @@ from texts import (
     ASK_HERO,
     ASK_NAME,
     FEEDBACK_PROMPT,
+    FEEDBACK_BAD_BORING,
+    FEEDBACK_BAD_HERO,
+    FEEDBACK_BAD_NOT_CALMING,
+    FEEDBACK_BAD_OTHER_ASK,
+    FEEDBACK_BAD_PROMPT,
+    FEEDBACK_BAD_SCARY,
+    FEEDBACK_BAD_SHORT,
+    FEEDBACK_BAD_THANKS,
+    FEEDBACK_BAD_TODAY,
     GENERATING,
     HELP_TEXT,
     NO_PROFILE_HINT,
     ONBOARDING_DONE,
     PRIVACY_TEXT,
-    REPLY_MENU_HINT,
     SCREEN_FREE_HINT,
-    TODAY_ASK,
     WELCOME_NEW,
     WELCOME_RETURN,
 )
@@ -57,15 +65,17 @@ class TodayFlow(StatesGroup):
     context = State()
 
 
-async def show_menu(message: Message, *, returning: bool = False) -> None:
+class FeedbackFlow(StatesGroup):
+    other_text = State()
+
+
+async def show_menu(message: Message) -> None:
     profile = await db.get_profile(message.from_user.id)
     if profile:
         text = WELCOME_RETURN.format(name=profile["name"])
     else:
         text = WELCOME_NEW
-    await message.answer(text, reply_markup=main_menu_kb())
-    hint = REPLY_MENU_HINT if not returning else "👇"
-    await message.answer(hint, reply_markup=reply_menu_kb())
+    await message.answer(text, reply_markup=reply_menu_kb())
 
 
 async def profile_or_default(telegram_id: int) -> tuple[dict, bool]:
@@ -109,7 +119,7 @@ async def reply_help(message: Message) -> None:
 @router.message(F.text == "🏠 Меню")
 async def reply_menu(message: Message, state: FSMContext) -> None:
     await state.clear()
-    await show_menu(message, returning=True)
+    await show_menu(message)
 
 
 @router.message(Command("privacy"))
@@ -207,7 +217,7 @@ async def onboard_hero(message: Message, state: FSMContext) -> None:
     )
     await state.clear()
     await message.answer(ONBOARDING_DONE)
-    await show_menu(message, returning=True)
+    await show_menu(message)
 
 
 @router.callback_query(F.data == "onboard:skip_hero")
@@ -225,14 +235,14 @@ async def onboard_skip_hero(callback: CallbackQuery, state: FSMContext) -> None:
     )
     await state.clear()
     await callback.message.answer(ONBOARDING_DONE)
-    await show_menu(callback.message, returning=True)
+    await show_menu(callback.message)
     await callback.answer()
 
 
 @router.callback_query(F.data == "menu")
 async def cb_menu(callback: CallbackQuery, state: FSMContext) -> None:
     await state.clear()
-    await show_menu(callback.message, returning=True)
+    await show_menu(callback.message)
     await callback.answer()
 
 
@@ -247,7 +257,17 @@ async def cb_profile(callback: CallbackQuery, state: FSMContext) -> None:
     await callback.answer()
 
 
-@router.callback_query(F.data.startswith("prof:"))
+@router.callback_query(F.data.regexp(r"^prof:gender:[mf]$"))
+async def prof_set_gender(callback: CallbackQuery) -> None:
+    gender = callback.data.split(":")[-1]
+    await db.update_profile_field(callback.from_user.id, "gender", gender)
+    label = GENDER_LABELS[gender]
+    await callback.message.answer(f"Пол обновлён: {label} ✓")
+    await send_profile(callback.message)
+    await callback.answer()
+
+
+@router.callback_query(F.data.in_({"prof:name", "prof:age", "prof:hero", "prof:gender"}))
 async def cb_prof_edit(callback: CallbackQuery, state: FSMContext) -> None:
     field = callback.data.split(":")[1]
     prompts = {
@@ -269,19 +289,6 @@ async def cb_prof_edit(callback: CallbackQuery, state: FSMContext) -> None:
     await callback.message.answer(text)
     await state.set_state(st)
     await state.update_data(edit_field=field)
-    await callback.answer()
-
-
-@router.callback_query(F.data.startswith("prof:gender:"))
-async def prof_set_gender(callback: CallbackQuery) -> None:
-    gender = callback.data.split(":")[-1]
-    if gender not in ("m", "f"):
-        await callback.answer()
-        return
-    await db.update_profile_field(callback.from_user.id, "gender", gender)
-    label = GENDER_LABELS[gender]
-    await callback.message.answer(f"Пол обновлён: {label} ✓")
-    await send_profile(callback.message)
     await callback.answer()
 
 
@@ -325,8 +332,9 @@ async def cb_mode(callback: CallbackQuery, state: FSMContext) -> None:
     if mode == "today":
         await state.set_state(TodayFlow.context)
         profile, has_profile = await profile_or_default(callback.from_user.id)
-        name = profile["name"] if has_profile else "малыш"
-        await callback.message.answer(TODAY_ASK.format(name=name))
+        await callback.message.answer(
+            today_ask(profile["name"], profile.get("gender", "m"))
+        )
         await callback.answer()
         return
     await callback.answer()
@@ -339,8 +347,7 @@ async def reply_mode(message: Message, state: FSMContext) -> None:
     if mode == "today":
         await state.set_state(TodayFlow.context)
         profile, has_profile = await profile_or_default(message.from_user.id)
-        name = profile["name"] if has_profile else "малыш"
-        await message.answer(TODAY_ASK.format(name=name))
+        await message.answer(today_ask(profile["name"], profile.get("gender", "m")))
         return
     await run_story_generation(message, state, mode)
 
@@ -359,6 +366,7 @@ async def run_story_generation(
     mode: str,
     day_context: str = "",
     user_id: int | None = None,
+    force_fresh: bool = False,
 ) -> None:
     uid = user_id or message.from_user.id
     profile, has_profile = await profile_or_default(uid)
@@ -366,6 +374,14 @@ async def run_story_generation(
     data = await state.get_data()
     if not day_context:
         day_context = data.get("day_context", "")
+
+    memories = await db.get_story_memories(uid)
+    variety = pick_variety(
+        profile["age_years"],
+        memories,
+        force_fresh=force_fresh,
+        seed=uid + len(memories) * 997 + (9991 if force_fresh else 0),
+    )
 
     await message.bot.send_chat_action(message.chat.id, "typing")
     status = await message.answer(GENERATING)
@@ -379,7 +395,12 @@ async def run_story_generation(
         length_pref=profile.get("length_pref") or 1.0,
         no_scary=bool(profile.get("no_scary", True)),
         gender=profile.get("gender", "m"),
+        variety=variety,
+        force_fresh=force_fresh,
     )
+
+    snippet = story[:160].replace("\n", " ")
+    await db.add_story_memory(uid, memory_from_plan(variety, mode, snippet))
 
     extra = SCREEN_FREE_HINT if mode == "screen_free" else ""
     name = profile["name"]
@@ -397,18 +418,103 @@ async def run_story_generation(
     await message.answer(FEEDBACK_PROMPT, reply_markup=feedback_kb())
 
 
+async def _handle_bad_reason(
+    callback: CallbackQuery,
+    state: FSMContext,
+    reason: str,
+) -> None:
+    uid = callback.from_user.id
+    profile, _ = await profile_or_default(uid)
+    mode = profile.get("last_mode") or ""
+
+    if reason == "other":
+        await state.set_state(FeedbackFlow.other_text)
+        await callback.message.answer(FEEDBACK_BAD_OTHER_ASK)
+        await callback.answer()
+        return
+
+    await db.save_story_feedback(uid, "bad", bad_reason=reason, mode=mode)
+
+    if reason == "scary":
+        await callback.message.answer(
+            FEEDBACK_BAD_SCARY, reply_markup=feedback_action_kb()
+        )
+    elif reason == "boring":
+        await callback.message.answer(
+            FEEDBACK_BAD_BORING, reply_markup=feedback_action_kb()
+        )
+    elif reason == "not_calming":
+        await callback.message.answer(
+            FEEDBACK_BAD_NOT_CALMING, reply_markup=main_menu_kb()
+        )
+    elif reason == "short":
+        await db.adjust_length_pref(uid, 1.15)
+        await callback.message.answer(
+            FEEDBACK_BAD_SHORT, reply_markup=feedback_action_kb()
+        )
+    elif reason == "hero":
+        await callback.message.answer(FEEDBACK_BAD_HERO, reply_markup=profile_kb())
+    elif reason == "today":
+        await state.set_state(TodayFlow.context)
+        await callback.message.answer(FEEDBACK_BAD_TODAY)
+        await callback.message.answer(
+            today_ask(profile["name"], profile.get("gender", "m"))
+        )
+    await callback.answer()
+
+
+@router.message(FeedbackFlow.other_text)
+async def feedback_other_text(message: Message, state: FSMContext) -> None:
+    text = (message.text or "").strip()
+    if len(text) < 2:
+        await message.answer("Напишите хотя бы пару слов — или нажмите /start.")
+        return
+    profile, _ = await profile_or_default(message.from_user.id)
+    await db.save_story_feedback(
+        message.from_user.id,
+        "bad",
+        bad_reason="other",
+        bad_text=text[:500],
+        mode=profile.get("last_mode") or "",
+    )
+    await state.clear()
+    await message.answer(FEEDBACK_BAD_THANKS, reply_markup=feedback_action_kb())
+
+
 @router.callback_query(F.data.startswith("fb:"))
-async def cb_feedback(callback: CallbackQuery) -> None:
-    kind = callback.data.split(":")[1]
+async def cb_feedback(callback: CallbackQuery, state: FSMContext) -> None:
+    parts = callback.data.split(":")
+    kind = parts[1]
+
+    if kind == "bad":
+        if len(parts) == 2:
+            await callback.message.answer(
+                FEEDBACK_BAD_PROMPT, reply_markup=feedback_bad_kb()
+            )
+            await callback.answer()
+            return
+        if len(parts) >= 3:
+            await _handle_bad_reason(callback, state, parts[2])
+            return
+
     if kind == "long":
+        await db.save_story_feedback(callback.from_user.id, "long")
         await db.adjust_length_pref(callback.from_user.id, 0.8)
         await callback.message.answer("Поняла — следующая сказка будет короче.")
     elif kind == "more":
-        await callback.message.answer("Выберите режим:", reply_markup=main_menu_kb())
-    elif kind == "asleep":
-        await callback.message.answer("Спокойной ночи 🌙")
-    else:
-        await callback.message.answer(
-            "Жаль, что не подошло. Попробуйте другой режим или /story."
+        await db.save_story_feedback(callback.from_user.id, "more")
+        profile, _ = await profile_or_default(callback.from_user.id)
+        mode = profile.get("last_mode") or "tired"
+        await callback.answer()
+        await run_story_generation(
+            callback.message,
+            state,
+            mode,
+            user_id=callback.from_user.id,
+            force_fresh=True,
         )
+        return
+    elif kind == "asleep":
+        await db.save_story_feedback(callback.from_user.id, "asleep")
+        await callback.message.answer("Спокойной ночи 🌙")
     await callback.answer()
