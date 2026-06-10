@@ -27,6 +27,8 @@ Telegram-бот — **вечерний co-pilot для уставших роди
 | [docs/BOT_FLOWS.md](docs/BOT_FLOWS.md) | Сценарии, команды, клавиатуры |
 | [docs/TECH_ARCHITECTURE.md](docs/TECH_ARCHITECTURE.md) | Архитектура: LLM, RAG, safety, инфра |
 | [docs/CONTENT_AND_SAFETY.md](docs/CONTENT_AND_SAFETY.md) | Промпты, sleep-onset, модерация |
+| [docs/STORY_PROMPT_CHECKLIST.md](docs/STORY_PROMPT_CHECKLIST.md) | Чеклист промпта (Пропп, метафоры, QA) |
+| [docs/STORY_QA_RELEASE.md](docs/STORY_QA_RELEASE.md) | **QA v2:** автотесты, матрица 18 кейсов, rollout |
 | [docs/MONETIZATION.md](docs/MONETIZATION.md) | Тарифы, платежи, метрики выручки |
 | [docs/METRICS.md](docs/METRICS.md) | KPI, гипотезы, аналитика |
 | [docs/GTM.md](docs/GTM.md) | Go-to-market, каналы, копирайт |

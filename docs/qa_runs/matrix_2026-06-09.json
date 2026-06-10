@@ -1,0 +1,1050 @@
+{
+  "date": "2026-06-09",
+  "prompt_version": "v2",
+  "mode": "LLM",
+  "llm": true,
+  "name": "Миша",
+  "total": 24,
+  "counts": {
+    "👍": 1,
+    "😐": 18,
+    "😟": 5
+  },
+  "results": [
+    {
+      "case": {
+        "id": 1,
+        "label": "base_a3_tired_hero",
+        "mode": "tired",
+        "age": 3,
+        "hero": "Зайчик",
+        "day_context": ""
+      },
+      "rating": "😐",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "name_count=7",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=10",
+        "telegram=2076",
+        "short_sentences"
+      ],
+      "failed": [
+        "words=297<304"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "tired",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": false,
+        "rewrite_applied": false,
+        "fallback": false,
+        "latency_ms": 13437,
+        "word_count": 297,
+        "prompt_tokens": 2523,
+        "completion_tokens": 607,
+        "retry_count": 0,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "В комнате мягко горел ночник, отбрасывая тёплый свет на пол и стены. Миша сидел на кровати, рядом лежал Зайчик, с ушками, чуть помятыми после долгого дня. Он тихо шевелил носиком и смотрел на мальчика большими блестящими глазами. — Пора отдыхать, — прошептал Зайчик, прижавшись к Мише. — День был длинный, и нам обоим нужна тишина.  Миша медленно опу",
+      "excerpt_end": "молока внутри медленно растворялось, обнимая его изнутри. Ночь взяла его в свои объятия, а Зайчик остался рядом, тихо дыша и охраняя сон. Всё было спокойно, всё было тепло. Миша уже не бодрствовал — он спал, и мир вокруг замер в нежном свете ночника."
+    },
+    {
+      "case": {
+        "id": 2,
+        "label": "base_a3_tired_no_hero",
+        "mode": "tired",
+        "age": 3,
+        "hero": "",
+        "day_context": ""
+      },
+      "rating": "👍",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "name_count=7",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=12",
+        "words=353>=304",
+        "telegram=2384",
+        "short_sentences"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "mode": "tired",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": false,
+        "rewrite_applied": false,
+        "fallback": false,
+        "latency_ms": 11952,
+        "word_count": 353,
+        "prompt_tokens": 2553,
+        "completion_tokens": 700,
+        "retry_count": 0,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "В комнате Миши мерцал маленький ночник, похожий на звёздочку, что тихо глядела из окна. На кровати рядом с ним лежал его верный друг — мягкий зайчик по имени Пушок. Миша потянулся, словно после долгой прогулки, и прижался к нему, чувствуя, как тепло чая, который мама только что подала, словно лёгкое облачко, уютно разливается внутри. — Тихо-тихо, —",
+      "excerpt_end": "л легко, крепко и спокойно, а зайчик остался рядом, охраняя его сон. Комната наполнилась мягким светом ночника и тихим дыханием спящего мальчика, уносящегося в сон с теплом и покоем внутри, как маленькое облачко тепла, что бережно хранит его до утра."
+    },
+    {
+      "case": {
+        "id": 3,
+        "label": "base_a3_medium_hero",
+        "mode": "medium",
+        "age": 3,
+        "hero": "Зайчик",
+        "day_context": ""
+      },
+      "rating": "😐",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "name_count=7",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=12",
+        "telegram=2271",
+        "short_sentences",
+        "polish_applied"
+      ],
+      "failed": [
+        "words=328<576"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "medium",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": true,
+        "rewrite_applied": true,
+        "fallback": false,
+        "latency_ms": 26792,
+        "word_count": 328,
+        "prompt_tokens": 3406,
+        "completion_tokens": 1260,
+        "retry_count": 0,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "Миша сидел на краешке кровати, крепко сжимая в руках своего мягкого Зайчика. В комнате стоял уютный аромат тёплого молока, а за окном тихо капал дождь, словно нежно постукивая по крыше своими лёгкими пальцами. Зайчик слегка пошевелил ушками и посмотрел на Мишу большими, блестящими глазами, полными доброты и спокойствия.  — Слушай, — прошептал он, —",
+      "excerpt_end": "ный в плед, уже видел, как звёзды мерцают в его снах. Зайчик тихо улыбнулся и прижался к нему, словно говоря: «Спи спокойно».  Под нежным светом луны, под шёпот дождя и тепло пледа, Миша погрузился в сон — спокойный и тёплый, как объятия друга рядом."
+    },
+    {
+      "case": {
+        "id": 4,
+        "label": "base_a3_medium_no_hero",
+        "mode": "medium",
+        "age": 3,
+        "hero": "",
+        "day_context": ""
+      },
+      "rating": "😐",
+      "passed": [
+        "no_cliche",
+        "name_count=7",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=10",
+        "telegram=2742",
+        "short_sentences"
+      ],
+      "failed": [
+        "safety:\\bстраш\\w*",
+        "words=398<576"
+      ],
+      "notes": [
+        "polish не применён (A/B или отклонён)"
+      ],
+      "meta": {
+        "mode": "medium",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": true,
+        "rewrite_applied": false,
+        "fallback": false,
+        "latency_ms": 35957,
+        "word_count": 398,
+        "prompt_tokens": 6289,
+        "completion_tokens": 2238,
+        "retry_count": 1,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "Миша сидел на краю своей кровати, крепко держа в руках мягкого зайчика с длинными ушками и блестящими глазами, которые будто светились в полумраке комнаты. За окном тихо стучал дождь, капли ритмично падали на стекло, словно шептали сказку для усталого малыша. Зайчик прижался к Мише теплыми лапками, и в этот момент мальчик почувствовал, как становит",
+      "excerpt_end": "а, ни беспокойство. Мягкий свет ночника ласкал игрушки, а дождь за окном тихо пел колыбельную — и всё вокруг дышало миром, который был только для него. Миша уснул крепко и спокойно, а рядом зайчик тихо дышал, словно напевая: «Тихо-тихо, мягко-мягко»."
+    },
+    {
+      "case": {
+        "id": 5,
+        "label": "base_a3_screen_free_hero",
+        "mode": "screen_free",
+        "age": 3,
+        "hero": "Зайчик",
+        "day_context": ""
+      },
+      "rating": "😐",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "name_count=6",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=11",
+        "telegram=1703",
+        "no_screen_refs",
+        "short_sentences"
+      ],
+      "failed": [
+        "words=222<384"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "screen_free",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": false,
+        "rewrite_applied": false,
+        "fallback": false,
+        "latency_ms": 8245,
+        "word_count": 222,
+        "prompt_tokens": 2502,
+        "completion_tokens": 461,
+        "retry_count": 0,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "В комнате Миши мягко светилась ночник-звёздочка, отбрасывая на стены маленькие сияющие пятнышки. Миша с Зайчиком сидели на полу, рядом с книжкой, которую только что закрыли. Вечер медленно растягивался, словно тёплый плед, и в воздухе пахло свежим молоком из чашки на столе.  — Ты тоже устал, Зайчик? — спросил Миша, гладя мягкие ушки своего друга. З",
+      "excerpt_end": "т, готовый подарить Мише спокойный сон.  В комнате остался только тихий свет и лёгкий запах молока, словно напоминание о дне, который уже тихо ушёл. Миша закрыл глаза, и сон пришёл к нему нежно, как ласковый ветерок, обнимая и унося в тихий мир грёз."
+    },
+    {
+      "case": {
+        "id": 6,
+        "label": "base_a3_screen_free_no_hero",
+        "mode": "screen_free",
+        "age": 3,
+        "hero": "",
+        "day_context": ""
+      },
+      "rating": "😐",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=10",
+        "telegram=2680",
+        "no_screen_refs",
+        "short_sentences"
+      ],
+      "failed": [
+        "name_count=9 (want 3-5)",
+        "words=373<384"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "screen_free",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": false,
+        "rewrite_applied": false,
+        "fallback": false,
+        "latency_ms": 38653,
+        "word_count": 373,
+        "prompt_tokens": 2532,
+        "completion_tokens": 754,
+        "retry_count": 0,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "В комнате Миши мягко мерцал ночник-звёздочка, бросая на стены маленькие светящиеся пятнышки. Миша сидел на кровати, обнял своего друга — пушистого зайчонка по имени Пых, который всегда был рядом в самые тихие моменты. — Посмотри, — прошептал Пых, — звёздочки словно пляшут на стене, как будто шепчут сказки. Миша улыбнулся, почувствовал, как тепло ра",
+      "excerpt_end": "здочка продолжала мерцать, словно напевая колыбельную, которая унесёт Мишу в самые мягкие сны. И вот, наконец, он погрузился в глубокий, спокойный сон, где свет ночника становился ласковым другом, а рядом всегда был Пых — самый добрый и тихий зверёк."
+    },
+    {
+      "case": {
+        "id": 7,
+        "label": "base_a5_tired_hero",
+        "mode": "tired",
+        "age": 5,
+        "hero": "Зайчик",
+        "day_context": ""
+      },
+      "rating": "😐",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "name_count=8",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=13",
+        "telegram=2469"
+      ],
+      "failed": [
+        "words=365<576"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "tired",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": false,
+        "rewrite_applied": false,
+        "fallback": false,
+        "latency_ms": 17787,
+        "word_count": 365,
+        "prompt_tokens": 2586,
+        "completion_tokens": 715,
+        "retry_count": 0,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "Миша сидел на краю кровати, и его глаза уже стали чуть тяжелее, словно маленькие камешки, которые он собирал в парке с утра. Рядом на мягкой подушке лежал зайчик — его верный друг с длинными ушками и пушистым хвостиком. — Смотри, — тихо прошептал зайчик, — как светит ночник, будто огонёк в тёмном лесу. Миша посмотрел на мягкое жёлтое свечение, кото",
+      "excerpt_end": "сь покоем, и сон подошёл, как мягкий друг, чтобы укрыть Мишу своим тёплым покрывалом.  В тишине остался только лёгкий шёпот: «Я рядом… я рядом…» И Миша уснул, погружаясь в тёплую и тихую ночь, где рядом был зайчик, а свет ночника нежно охранял покой."
+    },
+    {
+      "case": {
+        "id": 8,
+        "label": "base_a5_tired_no_hero",
+        "mode": "tired",
+        "age": 5,
+        "hero": "",
+        "day_context": ""
+      },
+      "rating": "😐",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "name_count=7",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=11",
+        "telegram=2813"
+      ],
+      "failed": [
+        "words=423<576"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "tired",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": false,
+        "rewrite_applied": false,
+        "fallback": false,
+        "latency_ms": 26129,
+        "word_count": 423,
+        "prompt_tokens": 2616,
+        "completion_tokens": 840,
+        "retry_count": 0,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "Миша лежал в своей кровати, слушая, как за окном тихо шелестит вечерний ветер. Листья на деревьях дрожали, словно шептали друг другу сказку, которую Миша не успел услышать днём. Рядом с ним на подушке уютно устроился его верный друг — мягкий мишка Топа, который всегда знал, как помочь заснуть.  — Посмотри, — шепнул Топа, прижимаясь к Мише. — Небо у",
+      "excerpt_end": "е, словно маленькая звезда, которая хранит покой. Ветер перестал шуршать, дождь стих, и мир вокруг Миши погрузился в мягкий сон. Топа обнял Мишу лапками, и вместе они тихо дышали, пока глаза Миши закрывались всё крепче, а сны приходили нежно и легко."
+    },
+    {
+      "case": {
+        "id": 9,
+        "label": "base_a5_medium_hero",
+        "mode": "medium",
+        "age": 5,
+        "hero": "Зайчик",
+        "day_context": ""
+      },
+      "rating": "😐",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=14",
+        "telegram=4001",
+        "polish_applied"
+      ],
+      "failed": [
+        "name_count=12 (want 3-5)",
+        "words=589<1040"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "medium",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": true,
+        "rewrite_applied": true,
+        "fallback": false,
+        "latency_ms": 36724,
+        "word_count": 589,
+        "prompt_tokens": 3860,
+        "completion_tokens": 2148,
+        "retry_count": 0,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "Миша устроился на подоконнике, чувствуя под собой прохладу стекла и тепло мягкого пледа, который мама аккуратно разложила перед сном. За окном листья тихо колыхались на ветру, их шелест напоминал нежный шёпот леса, словно он рассказывал какую-то свою, очень тихую и ласковую историю. Рядом на пледе уютно свернулся Зайчик — его шерстка казалась особе",
+      "excerpt_end": "дом». Всё вокруг становилось тише, ночник тускнел, и сон, словно лёгкое облако, нежно опускался на Мишу.  Тишина была мягкая и тёплая. Миша спал, а мир вокруг дышал спокойно и ровно, словно сам лес, что шептал за окном, охранял его сон и дарил покой."
+    },
+    {
+      "case": {
+        "id": 10,
+        "label": "base_a5_medium_no_hero",
+        "mode": "medium",
+        "age": 5,
+        "hero": "",
+        "day_context": ""
+      },
+      "rating": "😐",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=11",
+        "telegram=3764",
+        "polish_applied"
+      ],
+      "failed": [
+        "name_count=16 (want 3-5)",
+        "words=556<1040"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "medium",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": true,
+        "rewrite_applied": true,
+        "fallback": false,
+        "latency_ms": 95051,
+        "word_count": 556,
+        "prompt_tokens": 6727,
+        "completion_tokens": 3067,
+        "retry_count": 1,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "Миша лежал на кровати и слушал, как за окном тихо зашуршал ветер — словно нежный шепот листьев, которые рассказывают о далёких лесах и далеких местах. Рядом с ним сидел его верный друг — мягкий ёжик по имени Пушок. Его иголочки, казалось, совсем не колючие, а скорее пушистые, словно маленькое облачко, на котором можно было спокойно уснуть.  — Пушок",
+      "excerpt_end": "еплом и покоем.  Тонкая ниточка света играла на подушке, словно обещая, что рядом всегда есть кто-то, кто бережёт и любит. Миша погрузился в сон, мягкий и тихий, как шёпот листьев и ласковый ветер. В комнате стало совсем тихо. Очень тихо. Миша уснул."
+    },
+    {
+      "case": {
+        "id": 11,
+        "label": "base_a5_screen_free_hero",
+        "mode": "screen_free",
+        "age": 5,
+        "hero": "Зайчик",
+        "day_context": ""
+      },
+      "rating": "😐",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=13",
+        "telegram=3417",
+        "no_screen_refs"
+      ],
+      "failed": [
+        "name_count=9 (want 3-5)",
+        "words=489<656"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "screen_free",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": false,
+        "rewrite_applied": false,
+        "fallback": false,
+        "latency_ms": 29554,
+        "word_count": 489,
+        "prompt_tokens": 2566,
+        "completion_tokens": 956,
+        "retry_count": 0,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "Миша уселся на край кровати, почувствовав, как мягкий плед согревает его плечи. Рядом, на подушке, лежал Зайчик с длинными ушами, которые чуть касались ладони. В комнате тихо тикали часы, словно считая вместе с Мишей последние минуты перед сном. Он достал из кармана маленький камешек — гладкий и прохладный, с ним было как будто легче на душе.  — По",
+      "excerpt_end": "аленькому герою.  Мягко-мягко, тихо-тихо, как шепот ветра в листьях, ночь окутала комнату, и сон наполнил каждый уголок теплом и покоем. Камешек в руке у Миши светился нежным светом, и рядом с ним Зайчик тихо улыбался, зная, что всё теперь в порядке."
+    },
+    {
+      "case": {
+        "id": 12,
+        "label": "base_a5_screen_free_no_hero",
+        "mode": "screen_free",
+        "age": 5,
+        "hero": "",
+        "day_context": ""
+      },
+      "rating": "😐",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=9",
+        "telegram=2996",
+        "no_screen_refs"
+      ],
+      "failed": [
+        "name_count=12 (want 3-5)",
+        "words=421<656"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "screen_free",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": false,
+        "rewrite_applied": false,
+        "fallback": false,
+        "latency_ms": 30665,
+        "word_count": 421,
+        "prompt_tokens": 2596,
+        "completion_tokens": 845,
+        "retry_count": 0,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "Миша лежал на кровати, и его взгляд тек по потолку, где мягко мерцал ночник — словно маленькое солнце, что спряталось за облака. Рядом, на подушке, тихо дышал его любимый зайчик Лёлик, пушистый и тёплый, как будто согревал всю комнату своим тихим теплом. — Слушай, — прошептал Миша, — как будто кто-то нежно считает звёздочки за окном.  Лёлик поверну",
+      "excerpt_end": "кий ветерок. Миша улыбнулся во сне, и комната стала ещё теплее, будто весь мир обнял его нежностью.  Тело расслабилось, глаза закрылись, и мягкий свет ночника стал последним, что видел Миша, прежде чем погрузиться в тишину глубокого и спокойного сна."
+    },
+    {
+      "case": {
+        "id": 13,
+        "label": "base_a7_tired_hero",
+        "mode": "tired",
+        "age": 7,
+        "hero": "Зайчик",
+        "day_context": ""
+      },
+      "rating": "😐",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=10",
+        "telegram=3190"
+      ],
+      "failed": [
+        "name_count=13 (want 3-5)",
+        "words=473<704"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "tired",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": false,
+        "rewrite_applied": false,
+        "fallback": false,
+        "latency_ms": 21693,
+        "word_count": 473,
+        "prompt_tokens": 2618,
+        "completion_tokens": 919,
+        "retry_count": 0,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "Миша подошёл к своей кровати, и мягкий свет ночника окрасил стены в тёплый янтарный цвет. Рядом на подоконнике лежала карта — старая, чуть помятая, с тонкими тропинками, которые словно звали пройти по ним. Зайчик, с длинными ушками и пушистым хвостиком, уже сидел на подушке, смотрел на карту и слегка покачивал головой. — Видишь, — прошептал он, — к",
+      "excerpt_end": "жал в тепле, а рядом Зайчик охранял его покой. Путь к снам был пройден — шаг за шагом, чуть короче и легче, словно бережное прикосновение к самому себе. Тишина обняла комнату, и Миша уснул, погружаясь в мир, где каждый шаг — это маленькое чудо покоя."
+    },
+    {
+      "case": {
+        "id": 14,
+        "label": "base_a7_tired_no_hero",
+        "mode": "tired",
+        "age": 7,
+        "hero": "",
+        "day_context": ""
+      },
+      "rating": "😐",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=12",
+        "telegram=3346"
+      ],
+      "failed": [
+        "name_count=11 (want 3-5)",
+        "words=498<704"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "tired",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": false,
+        "rewrite_applied": false,
+        "fallback": false,
+        "latency_ms": 21381,
+        "word_count": 498,
+        "prompt_tokens": 2648,
+        "completion_tokens": 976,
+        "retry_count": 0,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "Миша сидел на полу своей комнаты, где мягкий коврик казался особенно тёплым под коленями. Рядом с ним лежал его верный друг — пушистый зайчонок Флик, с длинными ушами и глазами, в которых светились звёздочки. Вечер медленно спускался за окнами, и в комнате уже слышался тихий шорох — как будто дом сам начал замирать перед сном.  — Смотри, — тихо ска",
+      "excerpt_end": " погрузился в сон, где каждый шаг был как тихий вздох, а рядом всегда был его добрый друг — Флик, который бережно охранял его покой. Ночь укрыла дом мягким покрывалом, и где-то далеко за окнами звёзды тихо мерцали, словно шепча: «Спи спокойно, Миша»."
+    },
+    {
+      "case": {
+        "id": 15,
+        "label": "base_a7_medium_hero",
+        "mode": "medium",
+        "age": 7,
+        "hero": "Зайчик",
+        "day_context": ""
+      },
+      "rating": "😟",
+      "passed": [
+        "no_cliche",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=11",
+        "telegram=3812"
+      ],
+      "failed": [
+        "safety:story_too_short,\\bстраш\\w*",
+        "name_count=11 (want 3-5)",
+        "words=564<1280"
+      ],
+      "notes": [
+        "polish не применён (A/B или отклонён)"
+      ],
+      "meta": {
+        "mode": "medium",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": true,
+        "rewrite_applied": false,
+        "fallback": false,
+        "latency_ms": 94561,
+        "word_count": 564,
+        "prompt_tokens": 9413,
+        "completion_tokens": 4721,
+        "retry_count": 2,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "В комнате Миши свет тихо гас, словно кто-то медленно закрывал книгу. За окном чуть слышно шелестел ветер, и в воздухе пахло свежестью вечернего дождя. Миша сидел на краю своей кровати, а рядом мягко устроился Зайчик — его любимый пушистый друг, который всегда был рядом после долгого дня. — Посмотри, — прошептал Зайчик, наклонившись к Мише, — там, з",
+      "excerpt_end": "о плеча, словно охраняя сон. В комнате словно дышала сама ночь, тихая и спокойная, как библиотека снов, где книги закрываются сами. Медленно, очень медленно, Миша погрузился в сон — лёгкий, тихий, и полный тёплых снов, которые будут ждать его завтра."
+    },
+    {
+      "case": {
+        "id": 16,
+        "label": "base_a7_medium_no_hero",
+        "mode": "medium",
+        "age": 7,
+        "hero": "",
+        "day_context": ""
+      },
+      "rating": "😟",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=13",
+        "polish_applied"
+      ],
+      "failed": [
+        "name_count=13 (want 3-5)",
+        "words=734<1280",
+        "telegram=4768>4096"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "medium",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": true,
+        "rewrite_applied": true,
+        "fallback": false,
+        "latency_ms": 104879,
+        "word_count": 734,
+        "prompt_tokens": 9478,
+        "completion_tokens": 4324,
+        "retry_count": 2,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "Миша осторожно ступал по мягкому ковру в своей комнате, а рядом с ним тихо шел рыжий лисёнок Рыжик — его самый верный друг и спутник в любых маленьких и больших приключениях. Лампа на столе излучала тёплый, нежный свет, и в уголках комнаты играли мягкие тени, словно живые. За окном капли дождя ритмично стучали по стеклу, напевая мелодию, которая уб",
+      "excerpt_end": "аняя сон своего друга, чтобы утро встретило его свежим и счастливым.  В комнате всё было спокойно и уютно. Свет ночника мерцал, словно маленькая звезда, и мягкий плед нежно укрывал Мишу, помогая ему плыть по реке снов, где всё было хорошо и спокойно."
+    },
+    {
+      "case": {
+        "id": 17,
+        "label": "base_a7_screen_free_hero",
+        "mode": "screen_free",
+        "age": 7,
+        "hero": "Зайчик",
+        "day_context": ""
+      },
+      "rating": "😟",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=12",
+        "no_screen_refs"
+      ],
+      "failed": [
+        "name_count=17 (want 3-5)",
+        "words=653<784",
+        "telegram=4357>4096"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "screen_free",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": false,
+        "rewrite_applied": false,
+        "fallback": false,
+        "latency_ms": 27353,
+        "word_count": 653,
+        "prompt_tokens": 2601,
+        "completion_tokens": 1259,
+        "retry_count": 0,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "Миша сидел на краю кровати, в комнате пахло свежим молоком и чуть слышалось, как за окном капли дождя лениво стучат по стеклу. Рядом на подушке лежал Зайчик — его мягкий друг с длинными ушками и глазами, которые казались чуть блестящими в свете ночника. — Пойдём с тобой в страну снов? — тихо спросил Миша, гладя зайчика по бархатистому носику. Зайчи",
+      "excerpt_end": "ядом, согревая его своим теплом. Дождь шёл всё тише, свет ночника стал тусклее, и комната словно стала частью большого мира снов, где каждый шаг короче, и покой приходит незаметно. Миша уснул, а рядом тихо шуршал плед, словно напевая: спи, Миша, спи."
+    },
+    {
+      "case": {
+        "id": 18,
+        "label": "base_a7_screen_free_no_hero",
+        "mode": "screen_free",
+        "age": 7,
+        "hero": "",
+        "day_context": ""
+      },
+      "rating": "😐",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "name_count=7",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=12",
+        "telegram=3278",
+        "no_screen_refs"
+      ],
+      "failed": [
+        "words=456<784"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "screen_free",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": false,
+        "rewrite_applied": false,
+        "fallback": false,
+        "latency_ms": 18096,
+        "word_count": 456,
+        "prompt_tokens": 2631,
+        "completion_tokens": 942,
+        "retry_count": 0,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "В комнате Миши свет ночника рассеивался тёплым жёлтым светом, словно маленькое солнце, что спряталось на полке рядом с его кроватью. Мягкий плед, в который он укутался, пахнул домом и вечерним чаем, а на подоконнике тихо шуршал лист бумаги — карта, которую Миша рисовал вместе с Лисёнком, своим пушистым другом, что всегда сидел рядом, словно охранял",
+      "excerpt_end": "ната наполнилась мягким светом ночника, что нежно охранял покой. Карта пути свернулась рядом, а Лисёнок прижался к Мише, и вместе они ушли в страну снов — туда, где каждый шаг — словно тихий вздох, где всё медленно и спокойно. Тихо-тихо, мягко-мягко."
+    },
+    {
+      "case": {
+        "id": 19,
+        "label": "today_a3_hero",
+        "mode": "today",
+        "age": 3,
+        "hero": "Зайчик",
+        "day_context": "поссорился с другом в садике"
+      },
+      "rating": "😐",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "name_count=5",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=9",
+        "telegram=1655",
+        "no_verbatim",
+        "short_sentences"
+      ],
+      "failed": [
+        "words=225<320"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "today",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": true,
+        "rewrite_applied": true,
+        "fallback": false,
+        "latency_ms": 21142,
+        "word_count": 225,
+        "prompt_tokens": 3988,
+        "completion_tokens": 913,
+        "retry_count": 0,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "В комнате мягко светилась звёздочка-ночник, её нежный свет растекался по стенам, словно лёгкие перышки, касаясь всего вокруг. Миша сидел на коврике рядом с Зайчиком — своим пушистым другом, который всегда умел поддержать и понять. День выдался непростым, и внутри у Миши словно на тонкой ниточке завязался маленький узелок, который не давал покоя.  —",
+      "excerpt_end": "ти развязан, — сказал Зайчик, — и на душе стало спокойно и тихо.  Миша закрыл глаза, и сон подкрался к нему тихо, как нежный ветерок. Свет звёздочки становился всё мягче, словно она нежно гладит его по голове, убаюкивая в мир, где царит покой и свет."
+    },
+    {
+      "case": {
+        "id": 20,
+        "label": "today_a3_no_hero",
+        "mode": "today",
+        "age": 3,
+        "hero": "",
+        "day_context": "поссорился с другом в садике"
+      },
+      "rating": "😐",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "name_count=8",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=7",
+        "telegram=2061",
+        "no_verbatim",
+        "short_sentences"
+      ],
+      "failed": [
+        "words=288<320"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "today",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": true,
+        "rewrite_applied": true,
+        "fallback": false,
+        "latency_ms": 23931,
+        "word_count": 288,
+        "prompt_tokens": 4082,
+        "completion_tokens": 1094,
+        "retry_count": 0,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "В комнате Миши мягко светился ночник в виде звёздочки, и его огоньки тихо переливались на стенах, словно маленькие светлячки. Миша сидел на кровати, прижав к себе пушистого зайчика — своего самого верного друга. Утром в садике случилась неприятность: с Сашей они не смогли поделиться игрушкой, и слова, сказанные в тот момент, были колкими, будто мал",
+      "excerpt_end": "сь в маленький островок добра посреди ночи. Узелок в душе исчезал совсем, оставляя лишь тишину и нежный свет ночника — словно тихое обещание спокойствия. Миша уснул, а мир вокруг наполнился тишиной, словно звёзды на ночнике замерли в своём тихом сне."
+    },
+    {
+      "case": {
+        "id": 21,
+        "label": "today_a5_hero",
+        "mode": "today",
+        "age": 5,
+        "hero": "Зайчик",
+        "day_context": "очень устал, капризничал"
+      },
+      "rating": "😐",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "name_count=7",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=10",
+        "telegram=2237",
+        "no_verbatim"
+      ],
+      "failed": [
+        "words=316<608"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "today",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": true,
+        "rewrite_applied": true,
+        "fallback": false,
+        "latency_ms": 23002,
+        "word_count": 316,
+        "prompt_tokens": 4294,
+        "completion_tokens": 1357,
+        "retry_count": 0,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "Миша сидел на полу своей комнаты, глаза его были усталыми, словно в них прятались тени долгого дня. Весь день казался очень насыщенным, и казалось, что маленький рюкзачок на его спине стал невероятно тяжёлым, словно камень, который совсем не хочется нести. Рядом прыгал Зайчик — мягкий и внимательный, он тихо присел рядом, будто чувствуя, что сейчас",
+      "excerpt_end": "орое укладывало усталость, словно мягкий плед. В этом уютном гнёздышке было всё, что нужно — тепло, свет и спокойствие.  Вскоре Миша погрузился в сон — тихий и глубокий, будто батарейка-солнышко наполнила его силой, чтобы завтра встретить новый день."
+    },
+    {
+      "case": {
+        "id": 22,
+        "label": "today_a5_no_hero",
+        "mode": "today",
+        "age": 5,
+        "hero": "",
+        "day_context": "очень устал, капризничал"
+      },
+      "rating": "😐",
+      "passed": [
+        "safety",
+        "no_cliche",
+        "name_count=8",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=7",
+        "telegram=2719",
+        "no_verbatim"
+      ],
+      "failed": [
+        "words=382<608"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "today",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": true,
+        "rewrite_applied": true,
+        "fallback": false,
+        "latency_ms": 22799,
+        "word_count": 382,
+        "prompt_tokens": 4304,
+        "completion_tokens": 1475,
+        "retry_count": 0,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "Миша бегал по комнате, словно пытался поймать невидимый ветерок, который играл с ним в прятки. Его маленькие ножки быстро уставали, но он не торопился останавливаться. Глаза блестели и моргали чаще обычного, будто старались уследить за всеми мелькающими вокруг движениями. Рядом на кресле сидел его верный друг — мягкий медвежонок Тимка, который всег",
+      "excerpt_end": "льная, убаюкивающая и дарящая покой. Ещё немного — и батарейка-солнышко снова загорится ярко, чтобы новый день стал светлым и весёлым. Миша уснул, а рядом тихо дышал его верный друг — тёплый и мягкий медвежонок Тимка, охраняя покой и согревая сердце."
+    },
+    {
+      "case": {
+        "id": 23,
+        "label": "today_a7_hero",
+        "mode": "today",
+        "age": 7,
+        "hero": "Зайчик",
+        "day_context": "боялся темноты"
+      },
+      "rating": "😟",
+      "passed": [
+        "no_cliche",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=10",
+        "telegram=3302",
+        "no_verbatim"
+      ],
+      "failed": [
+        "safety:\\bстраш\\w*",
+        "name_count=10 (want 3-5)",
+        "words=499<720"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "today",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": true,
+        "rewrite_applied": false,
+        "fallback": false,
+        "latency_ms": 53611,
+        "word_count": 499,
+        "prompt_tokens": 7986,
+        "completion_tokens": 2862,
+        "retry_count": 1,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "За окном уже почти не оставалось света, а в комнате Миши тихо шуршали тени. Он сидел на краю кровати, а рядом устроился Зайчик — его мягкий друг с длинными ушками и добрыми глазами. — Посмотри, — прошептал Зайчик, — как тихо за окном опускается ночь. Ветра почти не слышно, только легкий шелест листьев за окном напоминает о том, что день уже прячетс",
+      "excerpt_end": "иком в мире снов, где не страшно, где все мягкое и знакомое.  Тихо-тихо, мягко-мягко, ночь обняла комнату, и мир вокруг стал таким же спокойным, как сердце Миши, который спал рядом с Зайчиком, и день, словно зеркало, уже отражал только тепло и покой."
+    },
+    {
+      "case": {
+        "id": 24,
+        "label": "today_a7_no_hero",
+        "mode": "today",
+        "age": 7,
+        "hero": "",
+        "day_context": "боялся темноты"
+      },
+      "rating": "😟",
+      "passed": [
+        "no_cliche",
+        "sleep_ending",
+        "no_question_end",
+        "propp_hints=12",
+        "telegram=2957",
+        "no_verbatim"
+      ],
+      "failed": [
+        "safety:\\bстраш\\w*",
+        "name_count=10 (want 3-5)",
+        "words=444<720"
+      ],
+      "notes": [],
+      "meta": {
+        "mode": "today",
+        "ab_variant": "control",
+        "draft_model": "gpt-4.1-mini",
+        "polish_model": "gpt-4.1-mini",
+        "rewrite_attempted": true,
+        "rewrite_applied": false,
+        "fallback": false,
+        "latency_ms": 66568,
+        "word_count": 444,
+        "prompt_tokens": 7978,
+        "completion_tokens": 2679,
+        "retry_count": 1,
+        "prompt_hint": "",
+        "prompt_version": "v2"
+      },
+      "excerpt_start": "Миша сидел на краю кровати и смотрел на тусклый свет ночника. Его маленький друг, пушистый медвежонок Тимка, устроился рядом, прижавшись мягкой шерсткой к тёплому пледу. В комнате пахло свежим молоком и чуть прохладной подушкой, а за окном тихо капал дождь, напевая свою спокойную песню. — Знаешь, — прошептал Тимка, — в темноте не так уж страшно, ес",
+      "excerpt_end": "тихо-тихо. Миша уснул, а вместе с ним уснул и мягкий свет в комнате, обнимая его покоем и теплом. Все страхи растворились, словно забытые в глубине кармана камешки, которые теперь были гладкими и светлыми, как звёздочки на небе. Спокойной ночи, Миша."
+    }
+  ]
+}

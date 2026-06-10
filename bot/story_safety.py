@@ -60,8 +60,43 @@ META_RETRY_HINT = (
 PROSE_VIOLATIONS = frozenset({"low_preposition_density", "paragraphs_missing_prepositions"})
 
 LENGTH_VIOLATIONS = frozenset({"story_too_short"})
+NAME_VIOLATIONS = frozenset({"name_too_often", "name_too_rare"})
 
 TODAY_VIOLATIONS = frozenset({"verbatim_day_context"})
+
+CLICHE_VIOLATIONS = frozenset({"ai_cliche_density", "ai_cliche_opening"})
+
+# Штампы ИИ — post-check (не путать с AI_CLICHE_AVOID в промпте)
+AI_CLICHE_PHRASES = [
+    "в этот вечер",
+    "оказалось, что",
+    "оказалось что",
+    "и тут",
+    "вдруг понял",
+    "вдруг поняла",
+    "история началась",
+    "наступил вечер",
+    "как из сказки",
+    "волшебный мир",
+    "необыкновенн",
+    "удивительн",
+]
+
+AI_CLICHE_OPENING = [
+    "в этот вечер",
+    "наступил вечер",
+    "история началась",
+    "жил-был",
+    "однажды вечером",
+    "в одном далёком",
+]
+
+CLICHE_RETRY_HINT = (
+    "Текст звучит шаблонно ({violations}). "
+    "Убери штампы: «в этот вечер», «оказалось что», «и тут», «вдруг понял», "
+    "«история началась». Начни с конкретной сцены — звук, свет, запах, ощущение. "
+    "Сохрани сюжет и длину."
+)
 
 PROSE_RETRY_HINT = (
     "Текст слишком рубленый, мало предлогов и местоимений ({violations}). "
@@ -73,7 +108,15 @@ PROSE_RETRY_HINT = (
 LENGTH_RETRY_HINT = (
     "Текст слишком короткий ({word_count} слов, нужно минимум {word_min}). "
     "Разверни историю: больше абзацев, диалогов между героем и любимым персонажем, "
-    "описаний (звук, тепло, свет). Не заканчивай раньше времени."
+    "описаний (звук, тепло, свет). Каждый абзац — 4–6 предложений. Не заканчивай раньше времени."
+)
+
+NAME_RETRY_HINT = (
+    "Имя «{name}» использовано неправильно ({violations}). "
+    "ОБЯЗАТЕЛЬНО: первый абзац с именем; всего 3–5 упоминаний "
+    "(«{name}», «{name_gen}» и другие падежи). "
+    "Местоимения — только между именами, не вместо них. "
+    "Запрещена сказка без имени ребёнка."
 )
 
 TODAY_RETRY_HINT = (
@@ -154,13 +197,41 @@ def check_story_length(text: str, word_min: int) -> list[str]:
     """Сказка слишком короткая относительно возраста и режима."""
     if word_min <= 0:
         return []
-    if _word_count(text) < int(word_min * 0.45):
+    if _word_count(text) < int(word_min * 0.70):
         return ["story_too_short"]
+    return []
+
+
+def check_name_usage(text: str, name: str, gender: str = "m") -> list[str]:
+    """Имя ребёнка — 3–5 раз на сказку (любой падеж)."""
+    from name_grammar import count_name_mentions
+
+    name = name.strip()
+    if len(name) < 2:
+        return []
+    count = count_name_mentions(text, name, gender)
+    if count < 3:
+        return ["name_too_rare"]
+    if count > 5:
+        return ["name_too_often"]
     return []
 
 
 def story_word_count(text: str) -> int:
     return _word_count(text)
+
+
+def check_ai_cliches(text: str) -> list[str]:
+    """Слишком много ИИ-штампов или клише в начале."""
+    lower = text.lower()
+    hits = sum(1 for phrase in AI_CLICHE_PHRASES if phrase in lower)
+    if hits >= 3:
+        return ["ai_cliche_density"]
+
+    opening = lower[:180]
+    if any(phrase in opening for phrase in AI_CLICHE_OPENING):
+        return ["ai_cliche_opening"]
+    return []
 
 
 def check_today_verbatim(text: str, day_context: str) -> list[str]:
@@ -182,13 +253,18 @@ def check_story(
     no_scary: bool = True,
     word_min: int = 0,
     day_context: str = "",
+    name: str = "",
+    gender: str = "m",
 ) -> list[str]:
     """Возвращает список нарушений; пустой список = ok."""
     violations: list[str] = []
     violations.extend(_find_violations(text, UNIVERSAL_BLOCK))
     violations.extend(_find_violations(text, META_NARRATION_BLOCK))
     violations.extend(check_connected_prose(text))
+    violations.extend(check_ai_cliches(text))
     violations.extend(check_story_length(text, word_min))
+    if name:
+        violations.extend(check_name_usage(text, name, gender))
     if day_context:
         violations.extend(check_today_verbatim(text, day_context))
     if no_scary:

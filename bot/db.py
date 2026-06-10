@@ -60,10 +60,31 @@ async def init_db() -> None:
             );
             CREATE INDEX IF NOT EXISTS idx_story_feedback_user
                 ON story_feedback(user_id, id DESC);
+            CREATE TABLE IF NOT EXISTS story_generation_log (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                mode TEXT,
+                ab_variant TEXT,
+                draft_model TEXT,
+                polish_model TEXT,
+                rewrite_attempted INTEGER DEFAULT 0,
+                rewrite_applied INTEGER DEFAULT 0,
+                fallback INTEGER DEFAULT 0,
+                latency_ms INTEGER DEFAULT 0,
+                word_count INTEGER DEFAULT 0,
+                prompt_tokens INTEGER DEFAULT 0,
+                completion_tokens INTEGER DEFAULT 0,
+                retry_count INTEGER DEFAULT 0
+            );
+            CREATE INDEX IF NOT EXISTS idx_story_gen_log_user
+                ON story_generation_log(user_id, id DESC);
             """
         )
         await db.commit()
         await _migrate_gender_column(db)
+        await _migrate_prompt_hint_column(db)
+        await _migrate_story_gen_log_columns(db)
 
 
 STORY_MEMORY_KEEP = 12
@@ -115,6 +136,70 @@ async def add_story_memory(telegram_id: int, memory: dict) -> None:
             )
             """,
             (telegram_id, telegram_id, STORY_MEMORY_KEEP),
+        )
+        await db.commit()
+
+
+async def log_story_generation(telegram_id: int, meta: dict) -> None:
+    """Лог генерации для A/B и метрик (latency, tokens, rewrite)."""
+    await ensure_user(telegram_id)
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        await db.execute(
+            """
+            INSERT INTO story_generation_log (
+                user_id, mode, ab_variant, draft_model, polish_model,
+                rewrite_attempted, rewrite_applied, fallback,
+                latency_ms, draft_latency_ms, polish_latency_ms,
+                word_count, prompt_tokens, completion_tokens, retry_count,
+                prompt_version
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                telegram_id,
+                meta.get("mode", ""),
+                meta.get("ab_variant", ""),
+                meta.get("draft_model", ""),
+                meta.get("polish_model", ""),
+                1 if meta.get("rewrite_attempted") else 0,
+                1 if meta.get("rewrite_applied") else 0,
+                1 if meta.get("fallback") else 0,
+                int(meta.get("latency_ms") or 0),
+                int(meta.get("draft_latency_ms") or 0),
+                int(meta.get("polish_latency_ms") or 0),
+                int(meta.get("word_count") or 0),
+                int(meta.get("prompt_tokens") or 0),
+                int(meta.get("completion_tokens") or 0),
+                int(meta.get("retry_count") or 0),
+                meta.get("prompt_version", ""),
+            ),
+        )
+        await db.commit()
+
+
+async def _migrate_story_gen_log_columns(db: aiosqlite.Connection) -> None:
+    cur = await db.execute("PRAGMA table_info(story_generation_log)")
+    cols = {row[1] for row in await cur.fetchall()}
+    if "prompt_version" not in cols:
+        await db.execute(
+            "ALTER TABLE story_generation_log ADD COLUMN prompt_version TEXT NOT NULL DEFAULT ''"
+        )
+    if "draft_latency_ms" not in cols:
+        await db.execute(
+            "ALTER TABLE story_generation_log ADD COLUMN draft_latency_ms INTEGER DEFAULT 0"
+        )
+    if "polish_latency_ms" not in cols:
+        await db.execute(
+            "ALTER TABLE story_generation_log ADD COLUMN polish_latency_ms INTEGER DEFAULT 0"
+        )
+    await db.commit()
+
+
+async def _migrate_prompt_hint_column(db: aiosqlite.Connection) -> None:
+    cur = await db.execute("PRAGMA table_info(users)")
+    cols = {row[1] for row in await cur.fetchall()}
+    if "prompt_hint" not in cols:
+        await db.execute(
+            "ALTER TABLE users ADD COLUMN prompt_hint TEXT NOT NULL DEFAULT ''"
         )
         await db.commit()
 
@@ -224,6 +309,53 @@ async def adjust_length_pref(telegram_id: int, factor: float) -> None:
             (factor, telegram_id),
         )
         await db.commit()
+
+
+async def set_prompt_hint(telegram_id: int, hint_key: str) -> None:
+    await ensure_user(telegram_id)
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        await db.execute(
+            "UPDATE users SET prompt_hint = ? WHERE telegram_id = ?",
+            (hint_key.strip(), telegram_id),
+        )
+        await db.commit()
+
+
+async def get_prompt_hint(telegram_id: int) -> str:
+    await ensure_user(telegram_id)
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        cur = await db.execute(
+            "SELECT prompt_hint FROM users WHERE telegram_id = ?",
+            (telegram_id,),
+        )
+        row = await cur.fetchone()
+        return (row[0] or "").strip() if row else ""
+
+
+async def clear_prompt_hint(telegram_id: int) -> None:
+    await set_prompt_hint(telegram_id, "")
+
+
+async def get_recent_feedback_types(telegram_id: int, limit: int = 5) -> list[str]:
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        cur = await db.execute(
+            """
+            SELECT feedback FROM story_feedback
+            WHERE user_id = ?
+            ORDER BY id DESC
+            LIMIT ?
+            """,
+            (telegram_id, limit),
+        )
+        return [row[0] for row in await cur.fetchall()]
+
+
+async def feedback_variety_boost(telegram_id: int) -> int:
+    """+2 к fresh_boost, если последние 3 отзыва — «уснул»."""
+    recent = await get_recent_feedback_types(telegram_id, 3)
+    if len(recent) >= 3 and all(f == "asleep" for f in recent):
+        return 2
+    return 0
 
 
 async def save_story_feedback(

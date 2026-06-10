@@ -111,16 +111,21 @@
 
 ### Автомат (`story_safety.check_story`)
 
-- [ ] нет слов из чёрного списка (страшное, насилие)  
-- [ ] нет `?` в последних 200 символах  
-- [ ] при fail — 1 retry strict → fallback  
+- [x] нет слов из чёрного списка (страшное, насилие)  
+- [x] нет `?` в последних 200 символах  
+- [x] проверка ИИ-штампов (`check_ai_cliches`)  
+- [x] режим today: нет дословной цитаты `day_context` (`check_today_verbatim`)  
+- [x] при fail — retry strict → fallback  
+- [x] автотесты: `bot/tests/run_all.py` (6 модулей)
 
-### Ручной (10% выборка)
+### Ручной (матрица 18 кейсов)
+
+См. **[STORY_QA_RELEASE.md](./STORY_QA_RELEASE.md)** §2.
 
 - [ ] пройдены все 7 шагов Проппа (хотя бы намёком)  
-- [ ] 1–2 метафоры возраста уместны  
+- [ ] 1 метафора возраста (не каталог)  
 - [ ] финал — сон, не конфликт  
-- [ ] имя ребёнка 2–4 раза  
+- [ ] имя ребёнка 3–5 раз  
 - [ ] укладывается в Telegram (≤4096 с footer)  
 - [ ] родитель может прочитать вслух за целевое время  
 
@@ -130,17 +135,35 @@
 
 | Файл | Назначение |
 |------|------------|
-| `bot/prompts/system_ru.txt` | system prompt для LLM |
-| `bot/story_craft.py` | метафоры, Пропп, принципы |
-| `bot/story_generator.py` | сборка prompt, вызов API |
-| `bot/story_safety.py` | post-check + retry |
+| `bot/prompts/system_ru.txt` | system prompt (v2: голос → ритм → стиль) |
+| `bot/prompts/polish_ru.txt` | rewrite-pass после draft |
+| `bot/prompts/few_shot_ru.py` | эталонные абзацы по возрастам |
+| `bot/story_craft.py` | метафоры (1 на сказку), Пропп, голос, дуга |
+| `bot/story_generator.py` | сборка prompt, LLM, polish, meta |
+| `bot/story_safety.py` | post-check + retry + verbatim today |
+| `bot/story_feedback_hints.py` | feedback → подсказка в промпт |
+| `bot/story_variety.py` | variety + fresh_boost |
+| `bot/config.py` | модели, temp, A/B, `PROMPT_VERSION` |
+| `bot/tests/run_all.py` | единый runner автотестов |
+| `docs/STORY_QA_RELEASE.md` | матрица QA + rollout/rollback |
 | `docs/CONTENT_AND_SAFETY.md` | safety pipeline |
 
 ---
 
-## 8. Что улучшить дальше (P1)
+## 8. Статус улучшений (фазы 1–7)
 
-- [ ] A/B: с Проппом vs без — метрика «😴 Уснул»  
-- [ ] Библиотека из 20 «эталонных» сказок few-shot в промпт  
+| Пункт | Статус |
+|-------|--------|
+| Иерархия промпта, дуга вечера, без % sleep-onset | ✅ фаза 1 |
+| Few-shot + анти-штампы + retry по клише | ✅ фаза 2 |
+| Герой 3–5 раз, одна метафора на сказку | ✅ фаза 3 |
+| Rewrite-pass (polish) для medium/today | ✅ фаза 4 |
+| Модели/temp, A/B polish, `story_generation_log` | ✅ фаза 5 |
+| Feedback «😟» → `prompt_hint` | ✅ фаза 6 |
+| Автотесты, QA-матрица, `PROMPT_VERSION=v2` | ✅ фаза 7 |
+
+### Дальше (P2)
+
 - [ ] STT для «Сегодняшний день» + тот же `DAY_METAPHOR_MAP`  
-- [ ] Feedback «😟 Не подошло» → тег причины → коррекция промпта  
+- [ ] Расширить few-shot до 20 эталонов  
+- [ ] Дашборд по `story_generation_log` и feedback  

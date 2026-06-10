@@ -5,17 +5,46 @@ from aiogram.types import (
     ReplyKeyboardMarkup,
 )
 
+from rescue_scenarios import RESCUE_SCENARIOS
 from texts import MODE_LABELS
+
+RESCUE_MENU_BUTTON = "🆘 Быстрое спасение"
+RESCUE_REPLY_BUTTON = "🆘 Спасение"
 
 BUTTON_TO_MODE = {
     "😴 Нет сил": "tired",
     "⏱ 5 минут": "medium",
-    "📺 Вместо мультика": "screen_free",
     "✏️ Сегодняшний день": "today",
     "✏️ Сегодня": "today",
 }
 
-REPLY_BUTTON_TEXTS = frozenset(BUTTON_TO_MODE) | {"⚙️ Профиль", "❓ Помощь", "🏠 Меню"}
+USER_MODES = frozenset({"tired", "medium", "today"})
+
+REPLY_BUTTON_TEXTS = frozenset(BUTTON_TO_MODE) | {
+    RESCUE_REPLY_BUTTON,
+    "⚙️ Профиль",
+    "❓ Помощь",
+    "🏠 Меню",
+}
+
+
+def rescue_picker_kb() -> InlineKeyboardMarkup:
+    rows: list[list[InlineKeyboardButton]] = []
+    pair: list[InlineKeyboardButton] = []
+    for scenario in RESCUE_SCENARIOS:
+        pair.append(
+            InlineKeyboardButton(
+                text=scenario.label,
+                callback_data=f"rescue:{scenario.id}",
+            )
+        )
+        if len(pair) == 2:
+            rows.append(pair)
+            pair = []
+    if pair:
+        rows.append(pair)
+    rows.append([InlineKeyboardButton(text="🏠 В меню", callback_data="menu")])
+    return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
 def main_menu_kb() -> InlineKeyboardMarkup:
@@ -27,13 +56,15 @@ def main_menu_kb() -> InlineKeyboardMarkup:
             ],
             [
                 InlineKeyboardButton(
-                    text="📺 Вместо мультика", callback_data="mode:screen_free"
+                    text="✏️ Сегодняшний день", callback_data="mode:today"
                 ),
             ],
             [
                 InlineKeyboardButton(
-                    text="✏️ Сегодняшний день", callback_data="mode:today"
+                    text=RESCUE_MENU_BUTTON, callback_data="rescue:menu"
                 ),
+            ],
+            [
                 InlineKeyboardButton(text="⚙️ Профиль", callback_data="profile"),
             ],
         ]
@@ -152,8 +183,10 @@ def reply_menu_kb() -> ReplyKeyboardMarkup:
                 KeyboardButton(text="⏱ 5 минут"),
             ],
             [
-                KeyboardButton(text="📺 Вместо мультика"),
                 KeyboardButton(text="✏️ Сегодня"),
+            ],
+            [
+                KeyboardButton(text=RESCUE_REPLY_BUTTON),
             ],
             [
                 KeyboardButton(text="⚙️ Профиль"),

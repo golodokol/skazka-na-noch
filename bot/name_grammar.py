@@ -1,5 +1,7 @@
 """Пол ребёнка и правила согласования в русском тексте сказки."""
 
+import re
+
 Gender = str  # "m" | "f"
 
 GENDER_LABELS = {"m": "мальчик", "f": "девочка"}
@@ -74,6 +76,79 @@ def _heuristic_genitive(name: str, gender: Gender) -> str:
     return _preserve_case(name, name + "ы")
 
 
+def _pymorphy_inflect(name: str, gender: Gender, case: str) -> str | None:
+    global _morph_analyzer
+    try:
+        if _morph_analyzer is None:
+            import pymorphy3
+
+            _morph_analyzer = pymorphy3.MorphAnalyzer()
+        tag_hint = "femn" if gender == "f" else "masc"
+        parsed = _morph_analyzer.parse(name)
+        chosen = parsed[0]
+        for candidate in parsed:
+            if tag_hint in candidate.tag:
+                chosen = candidate
+                break
+        form = chosen.inflect({case})
+        if form and form.word:
+            return _preserve_case(name, form.word)
+    except Exception:
+        return None
+    return None
+
+
+def _heuristic_name_forms(name: str, gender: Gender) -> set[str]:
+    """Запасные падежи для частых русских имён, если pymorphy недоступен."""
+    forms = {name}
+    low = name.lower()
+    g = normalize_gender(gender)
+
+    if low.endswith("ия"):
+        forms.update({name[:-1] + "и", name[:-1] + "ю", name[:-2] + "ией", name[:-2] + "ии"})
+    elif low.endswith("ья"):
+        forms.update({name[:-1] + "и", name[:-1] + "ю", name[:-2] + "ьей", name[:-2] + "ьи"})
+    elif low.endswith("ша") or low.endswith("ча") or low.endswith("жа"):
+        forms.update({name[:-1] + "и", name[:-1] + "е", name[:-1] + "у", name[:-1] + "ей"})
+    elif low.endswith("я"):
+        forms.update({name[:-1] + "и", name[:-1] + "е", name[:-1] + "ю", name[:-1] + "ей"})
+    elif low.endswith("а"):
+        forms.update({name[:-1] + "ы", name[:-1] + "е", name[:-1] + "у", name[:-1] + "ой"})
+    elif low.endswith("й"):
+        forms.update({name[:-1] + "я", name[:-1] + "ю", name[:-1] + "ем"})
+    elif low.endswith("ь"):
+        forms.update({name[:-1] + "и", name[:-1] + "ю", name[:-1] + "ем"})
+    elif g == "m":
+        forms.update({name + "а", name + "у", name + "ом"})
+    else:
+        forms.update({name + "ы", name + "е", name + "у", name + "ой"})
+    return forms
+
+
+def name_search_forms(name: str, gender: str | None = "m") -> list[str]:
+    """Формы имени для поиска в тексте (именительный, родительный и др.)."""
+    name = name.strip()
+    if len(name) < 2:
+        return []
+    g = normalize_gender(gender)
+    forms = _heuristic_name_forms(name, g)
+    forms.add(name_genitive(name, g))
+    for case in ("datv", "accs", "ablt", "loct"):
+        inflected = _pymorphy_inflect(name, g, case)
+        if inflected:
+            forms.add(inflected)
+    return sorted(forms, key=len, reverse=True)
+
+
+def count_name_mentions(text: str, name: str, gender: str | None = "m") -> int:
+    """Сколько раз имя ребёнка звучит в тексте (любой падеж)."""
+    forms = name_search_forms(name, gender)
+    if not forms:
+        return 0
+    pattern = "|".join(re.escape(form) for form in forms)
+    return len(re.findall(pattern, text, re.IGNORECASE))
+
+
 def name_genitive(name: str, gender: str | None = "m") -> str:
     """Имя в родительном падеже: «у Маши», «у Арины», «у Ивана»."""
     name = name.strip()
@@ -138,6 +213,8 @@ def grammar_block(name: str, gender: Gender) -> str:
 Имя в именительном падеже: {name}.
 Имя в родительном падеже: {name_gen} (после «у {name_gen}», «для {name_gen}»).
 Местоимение о герое: только «{pron}» — не путать с другим родом.
+Имя «{name}» — обязательно 3–5 раз на всю сказку (можно «{name_gen}» и др. падежи); первый абзац — с именем.
+Между именами — «{pron}»; запрещена сказка без имени ребёнка.
 Согласуй с {name} все глаголы прошедшего времени, краткие прилагательные и причастия.
 Типичные формы: {verb_hints}; прилагательные: {adj_hints}.
 Пиши связными предложениями с предлогами (в, на, у, с, к, для, от, под, за, про) — не цепочкой коротких фраз.

@@ -8,7 +8,7 @@ from aiogram.enums import ParseMode
 from aiogram.exceptions import TelegramUnauthorizedError
 from aiogram.types import BotCommand
 
-from config import TELEGRAM_BOT_TOKEN
+from config import PROMPT_VERSION, TELEGRAM_BOT_TOKEN
 from db import init_db
 from handlers import router
 from session import BotSession
@@ -40,6 +40,8 @@ async def main() -> None:
         sys.exit(1)
 
     await init_db()
+
+    logger.info("Prompt version: %s", PROMPT_VERSION)
 
     session = BotSession()
     bot = Bot(

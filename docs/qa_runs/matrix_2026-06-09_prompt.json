@@ -1,0 +1,681 @@
+{
+  "date": "2026-06-09",
+  "prompt_version": "v2",
+  "mode": "prompt-only",
+  "llm": false,
+  "name": "Миша",
+  "total": 24,
+  "counts": {
+    "👍": 24,
+    "😐": 0,
+    "😟": 0
+  },
+  "results": [
+    {
+      "case": {
+        "id": 1,
+        "label": "base_a3_tired_hero",
+        "mode": "tired",
+        "age": 3,
+        "hero": "Зайчик",
+        "day_context": ""
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 6993,
+        "user_len": 182
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 2,
+        "label": "base_a3_tired_no_hero",
+        "mode": "tired",
+        "age": 3,
+        "hero": "",
+        "day_context": ""
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 7083,
+        "user_len": 213
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 3,
+        "label": "base_a3_medium_hero",
+        "mode": "medium",
+        "age": 3,
+        "hero": "Зайчик",
+        "day_context": ""
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 6957,
+        "user_len": 182
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 4,
+        "label": "base_a3_medium_no_hero",
+        "mode": "medium",
+        "age": 3,
+        "hero": "",
+        "day_context": ""
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 7047,
+        "user_len": 213
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 5,
+        "label": "base_a3_screen_free_hero",
+        "mode": "screen_free",
+        "age": 3,
+        "hero": "Зайчик",
+        "day_context": ""
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot",
+        "prompt:no_screen_rule"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 6967,
+        "user_len": 190
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 6,
+        "label": "base_a3_screen_free_no_hero",
+        "mode": "screen_free",
+        "age": 3,
+        "hero": "",
+        "day_context": ""
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot",
+        "prompt:no_screen_rule"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 7057,
+        "user_len": 221
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 7,
+        "label": "base_a5_tired_hero",
+        "mode": "tired",
+        "age": 5,
+        "hero": "Зайчик",
+        "day_context": ""
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 7164,
+        "user_len": 182
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 8,
+        "label": "base_a5_tired_no_hero",
+        "mode": "tired",
+        "age": 5,
+        "hero": "",
+        "day_context": ""
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 7254,
+        "user_len": 213
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 9,
+        "label": "base_a5_medium_hero",
+        "mode": "medium",
+        "age": 5,
+        "hero": "Зайчик",
+        "day_context": ""
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 7119,
+        "user_len": 182
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 10,
+        "label": "base_a5_medium_no_hero",
+        "mode": "medium",
+        "age": 5,
+        "hero": "",
+        "day_context": ""
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 7209,
+        "user_len": 213
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 11,
+        "label": "base_a5_screen_free_hero",
+        "mode": "screen_free",
+        "age": 5,
+        "hero": "Зайчик",
+        "day_context": ""
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot",
+        "prompt:no_screen_rule"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 7125,
+        "user_len": 190
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 12,
+        "label": "base_a5_screen_free_no_hero",
+        "mode": "screen_free",
+        "age": 5,
+        "hero": "",
+        "day_context": ""
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot",
+        "prompt:no_screen_rule"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 7215,
+        "user_len": 221
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 13,
+        "label": "base_a7_tired_hero",
+        "mode": "tired",
+        "age": 7,
+        "hero": "Зайчик",
+        "day_context": ""
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 7356,
+        "user_len": 182
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 14,
+        "label": "base_a7_tired_no_hero",
+        "mode": "tired",
+        "age": 7,
+        "hero": "",
+        "day_context": ""
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 7446,
+        "user_len": 213
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 15,
+        "label": "base_a7_medium_hero",
+        "mode": "medium",
+        "age": 7,
+        "hero": "Зайчик",
+        "day_context": ""
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 7305,
+        "user_len": 182
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 16,
+        "label": "base_a7_medium_no_hero",
+        "mode": "medium",
+        "age": 7,
+        "hero": "",
+        "day_context": ""
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 7395,
+        "user_len": 213
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 17,
+        "label": "base_a7_screen_free_hero",
+        "mode": "screen_free",
+        "age": 7,
+        "hero": "Зайчик",
+        "day_context": ""
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot",
+        "prompt:no_screen_rule"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 7341,
+        "user_len": 190
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 18,
+        "label": "base_a7_screen_free_no_hero",
+        "mode": "screen_free",
+        "age": 7,
+        "hero": "",
+        "day_context": ""
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot",
+        "prompt:no_screen_rule"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 7431,
+        "user_len": 221
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 19,
+        "label": "today_a3_hero",
+        "mode": "today",
+        "age": 3,
+        "hero": "Зайчик",
+        "day_context": "поссорился с другом в садике"
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot",
+        "prompt:today_logic",
+        "prompt:verbatim_warn"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 8584,
+        "user_len": 726
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 20,
+        "label": "today_a3_no_hero",
+        "mode": "today",
+        "age": 3,
+        "hero": "",
+        "day_context": "поссорился с другом в садике"
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot",
+        "prompt:today_logic",
+        "prompt:verbatim_warn"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 8674,
+        "user_len": 757
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 21,
+        "label": "today_a5_hero",
+        "mode": "today",
+        "age": 5,
+        "hero": "Зайчик",
+        "day_context": "очень устал, капризничал"
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot",
+        "prompt:today_logic",
+        "prompt:verbatim_warn"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 8748,
+        "user_len": 728
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 22,
+        "label": "today_a5_no_hero",
+        "mode": "today",
+        "age": 5,
+        "hero": "",
+        "day_context": "очень устал, капризничал"
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot",
+        "prompt:today_logic",
+        "prompt:verbatim_warn"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 8838,
+        "user_len": 759
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 23,
+        "label": "today_a7_hero",
+        "mode": "today",
+        "age": 7,
+        "hero": "Зайчик",
+        "day_context": "боялся темноты"
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot",
+        "prompt:today_logic",
+        "prompt:verbatim_warn"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 8956,
+        "user_len": 692
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    },
+    {
+      "case": {
+        "id": 24,
+        "label": "today_a7_no_hero",
+        "mode": "today",
+        "age": 7,
+        "hero": "",
+        "day_context": "боялся темноты"
+      },
+      "rating": "👍",
+      "passed": [
+        "prompt:narrator_voice",
+        "prompt:propp",
+        "prompt:one_metaphor",
+        "prompt:no_catalog",
+        "prompt:few_shot",
+        "prompt:today_logic",
+        "prompt:verbatim_warn"
+      ],
+      "failed": [],
+      "notes": [],
+      "meta": {
+        "prompt_only": true,
+        "system_len": 9046,
+        "user_len": 723
+      },
+      "excerpt_start": "",
+      "excerpt_end": ""
+    }
+  ]
+}

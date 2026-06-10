@@ -4,9 +4,14 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import CallbackQuery, Message
 
+import asyncio
+
 import db
+from config import GENERATION_STATUS_WAIT_SEC
 from keyboards import (
     BUTTON_TO_MODE,
+    RESCUE_REPLY_BUTTON,
+    USER_MODES,
     feedback_action_kb,
     feedback_bad_kb,
     feedback_kb,
@@ -14,10 +19,13 @@ from keyboards import (
     main_menu_kb,
     profile_kb,
     reply_menu_kb,
+    rescue_picker_kb,
     skip_hero_kb,
 )
 from name_grammar import GENDER_LABELS, normalize_gender, today_ask
-from story_generator import generate_story, split_message
+from rescue_scenarios import RESCUE_BY_ID
+from story_feedback_hints import BAD_REASON_TO_HINT
+from story_generator import generate_story, story_delivery_chunks
 from story_variety import memory_from_plan, pick_variety
 from texts import (
     AFTER_STORY,
@@ -36,16 +44,27 @@ from texts import (
     FEEDBACK_BAD_THANKS,
     FEEDBACK_BAD_TODAY,
     GENERATING,
+    GENERATING_SLOW,
     HELP_TEXT,
     NO_PROFILE_HINT,
     ONBOARDING_DONE,
     PRIVACY_TEXT,
-    SCREEN_FREE_HINT,
+    RESCUE_PICKER_INTRO,
     WELCOME_NEW,
     WELCOME_RETURN,
 )
 
 router = Router()
+
+LEGACY_MODE_MAP = {"screen_free": "tired"}
+
+
+def normalize_mode(mode: str) -> str:
+    """Активные режимы + маппинг снятых с меню (screen_free → tired)."""
+    mode = LEGACY_MODE_MAP.get(mode, mode)
+    if mode in USER_MODES:
+        return mode
+    return "tired"
 
 
 class Onboard(StatesGroup):
@@ -144,7 +163,7 @@ async def reply_profile(message: Message, state: FSMContext) -> None:
 @router.message(Command("story"))
 async def cmd_story(message: Message, state: FSMContext) -> None:
     profile, _ = await profile_or_default(message.from_user.id)
-    mode = profile.get("last_mode") or "tired"
+    mode = normalize_mode(profile.get("last_mode") or "tired")
     await run_story_generation(message, state, mode)
 
 
@@ -326,9 +345,39 @@ async def edit_hero(message: Message, state: FSMContext) -> None:
     await send_profile(message)
 
 
+@router.callback_query(F.data == "rescue:menu")
+async def cb_rescue_menu(callback: CallbackQuery) -> None:
+    await callback.message.answer(RESCUE_PICKER_INTRO, reply_markup=rescue_picker_kb())
+    await callback.answer()
+
+
+@router.callback_query(F.data.startswith("rescue:"))
+async def cb_rescue(callback: CallbackQuery, state: FSMContext) -> None:
+    rescue_id = callback.data.split(":", 1)[1]
+    if rescue_id == "menu":
+        return
+    if rescue_id not in RESCUE_BY_ID:
+        await callback.answer("Не нашла этот сценарий")
+        return
+    scenario = RESCUE_BY_ID[rescue_id]
+    await callback.answer()
+    await run_story_generation(
+        callback.message,
+        state,
+        mode=scenario.story_mode,
+        user_id=callback.from_user.id,
+        rescue_id=rescue_id,
+    )
+
+
+@router.message(F.text == RESCUE_REPLY_BUTTON)
+async def reply_rescue(message: Message) -> None:
+    await message.answer(RESCUE_PICKER_INTRO, reply_markup=rescue_picker_kb())
+
+
 @router.callback_query(F.data.startswith("mode:"))
 async def cb_mode(callback: CallbackQuery, state: FSMContext) -> None:
-    mode = callback.data.split(":")[1]
+    mode = normalize_mode(callback.data.split(":")[1])
     if mode == "today":
         await state.set_state(TodayFlow.context)
         profile, has_profile = await profile_or_default(callback.from_user.id)
@@ -360,6 +409,15 @@ async def today_context(message: Message, state: FSMContext) -> None:
     await run_story_generation(message, state, "today", day_context=ctx)
 
 
+async def _slow_generation_notice(status_msg: Message) -> None:
+    """Через N секунд обновляет статус, если сказка ещё генерируется."""
+    await asyncio.sleep(GENERATION_STATUS_WAIT_SEC)
+    try:
+        await status_msg.edit_text(GENERATING_SLOW)
+    except Exception:
+        pass
+
+
 async def run_story_generation(
     message: Message,
     state: FSMContext,
@@ -367,53 +425,68 @@ async def run_story_generation(
     day_context: str = "",
     user_id: int | None = None,
     force_fresh: bool = False,
+    rescue_id: str = "",
 ) -> None:
     uid = user_id or message.from_user.id
     profile, has_profile = await profile_or_default(uid)
+    mode = normalize_mode(mode)
 
     data = await state.get_data()
     if not day_context:
         day_context = data.get("day_context", "")
 
     memories = await db.get_story_memories(uid)
+    fresh_boost_offset = await db.feedback_variety_boost(uid)
+    prompt_hint = await db.get_prompt_hint(uid)
     variety = pick_variety(
         profile["age_years"],
         memories,
         force_fresh=force_fresh,
         seed=uid + len(memories) * 997 + (9991 if force_fresh else 0),
+        fresh_boost_offset=fresh_boost_offset,
     )
 
     await message.bot.send_chat_action(message.chat.id, "typing")
     status = await message.answer(GENERATING)
-
-    story, _used_llm = await generate_story(
-        mode=mode,
-        name=profile["name"],
-        age=profile["age_years"],
-        hero=profile.get("favorite_hero") or "",
-        day_context=day_context,
-        length_pref=profile.get("length_pref") or 1.0,
-        no_scary=bool(profile.get("no_scary", True)),
-        gender=profile.get("gender", "m"),
-        variety=variety,
-        force_fresh=force_fresh,
-    )
+    slow_notice = asyncio.create_task(_slow_generation_notice(status))
+    try:
+        story, gen_meta = await generate_story(
+            mode=mode,
+            name=profile["name"],
+            age=profile["age_years"],
+            hero=profile.get("favorite_hero") or "",
+            day_context=day_context,
+            length_pref=profile.get("length_pref") or 1.0,
+            no_scary=bool(profile.get("no_scary", True)),
+            gender=profile.get("gender", "m"),
+            variety=variety,
+            force_fresh=force_fresh,
+            user_id=uid,
+            prompt_hint=prompt_hint,
+            rescue_id=rescue_id,
+        )
+    finally:
+        slow_notice.cancel()
+        with asyncio.suppress(asyncio.CancelledError):
+            await slow_notice
+    await db.log_story_generation(uid, gen_meta.as_dict())
+    if prompt_hint:
+        await db.clear_prompt_hint(uid)
 
     snippet = story[:160].replace("\n", " ")
     await db.add_story_memory(uid, memory_from_plan(variety, mode, snippet))
 
-    extra = SCREEN_FREE_HINT if mode == "screen_free" else ""
     name = profile["name"]
     footer = AFTER_STORY.replace("{имя}", name).replace("{name}", name)
-    full = story + extra + footer
+    suffix = footer
     if not has_profile:
-        full += NO_PROFILE_HINT
+        suffix += NO_PROFILE_HINT
 
     await db.increment_usage(uid)
     await db.set_last_mode(uid, mode)
 
     await status.delete()
-    for chunk in split_message(full):
+    for chunk in story_delivery_chunks(story, suffix):
         await message.answer(chunk)
     await message.answer(FEEDBACK_PROMPT, reply_markup=feedback_kb())
 
@@ -434,6 +507,9 @@ async def _handle_bad_reason(
         return
 
     await db.save_story_feedback(uid, "bad", bad_reason=reason, mode=mode)
+    hint_key = BAD_REASON_TO_HINT.get(reason)
+    if hint_key:
+        await db.set_prompt_hint(uid, hint_key)
 
     if reason == "scary":
         await callback.message.answer(
@@ -477,6 +553,7 @@ async def feedback_other_text(message: Message, state: FSMContext) -> None:
         bad_text=text[:500],
         mode=profile.get("last_mode") or "",
     )
+    await db.set_prompt_hint(message.from_user.id, "other")
     await state.clear()
     await message.answer(FEEDBACK_BAD_THANKS, reply_markup=feedback_action_kb())
 
@@ -504,7 +581,7 @@ async def cb_feedback(callback: CallbackQuery, state: FSMContext) -> None:
     elif kind == "more":
         await db.save_story_feedback(callback.from_user.id, "more")
         profile, _ = await profile_or_default(callback.from_user.id)
-        mode = profile.get("last_mode") or "tired"
+        mode = normalize_mode(profile.get("last_mode") or "tired")
         await callback.answer()
         await run_story_generation(
             callback.message,
